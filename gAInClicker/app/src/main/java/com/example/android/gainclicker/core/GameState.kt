@@ -5,8 +5,10 @@ data class GameState(
 
     val modules: Set<Module> = setOf(),
 
-    val taskThreads: TaskThreadsState = TaskThreadsState()
-)
+    val tasks: TaskThreadsState = TaskThreadsState()
+) {
+    fun ioModulesCount() = modules.count { it.isIo }
+}
 
 data class Deposit(
     private val accounts: Map<Currency, Int> = mapOf()
@@ -47,14 +49,14 @@ data class Deposit(
 }
 
 data class TaskState(
-    val tasks: Task,
-    val progress: Int = 0
+    val task: Task,
+    val progress: Float = 0.0f
 )
 
 data class TaskThreadsState(
     val threadSlots: Int = 0,
-    val tasks: List<TaskState> = listOf(),
-    val taskThread: Set<TaskState> = linkedSetOf()
+    val tasks: List<TaskState> = Task.values().map { TaskState(it) },
+    val taskThreads: Set<Task> = linkedSetOf()
 ) {
     fun addThreadSlot(): TaskThreadsState = copy(threadSlots = threadSlots + 1)
 }

@@ -2,6 +2,7 @@ package com.example.android.gainclicker.ui
 
 import com.example.android.gainclicker.core.ClickAction
 import com.example.android.gainclicker.core.Currency
+import com.example.android.gainclicker.core.Task
 
 val Currency.title: String
     get() = when (this) {
@@ -22,4 +23,13 @@ val ClickAction.title: String
         ClickAction.IO_MODULE_VIDEO -> "Build video I/O module"
         ClickAction.THREAD -> "Allocate thread slot"
         ClickAction.CLOUD_STORAGE -> "Build cloud storage"
+    }
+
+val Task.title: String
+    get() = when (this) {
+        Task.INTROSPECTION -> "Introspection"
+        Task.DATASET_ACCRUAL -> "Dataset accrual"
+        Task.DATA_SEARCH -> "Data search"
+        Task.DATA_CONVERSION -> "Data conversion"
+        Task.DATA_GENERATION -> "Data generation"
     }

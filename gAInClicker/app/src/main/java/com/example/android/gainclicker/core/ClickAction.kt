@@ -1,5 +1,7 @@
 package com.example.android.gainclicker.core
 
+const val CURRENCY_GAIN = 100
+
 const val MEMORY_BIN_NEURONS_REQUIRED = 100
 const val MEMORY_BIN_NEURONS_COST = 100
 
@@ -87,7 +89,7 @@ enum class ClickAction(
         return when (gain) {
             is CurrencyGain -> true
             is ModuleGain -> gain.module !in state.modules
-            ThreadSlotGain -> state.taskThreads.threadSlots < MAX_TASK_THREAD_SLOTS
+            ThreadSlotGain -> state.tasks.threadSlots < MAX_TASK_THREAD_SLOTS
         } && state.deposit.hasAmount(*visibilityRequirement.toTypedArray())
     }
 
@@ -101,13 +103,13 @@ enum class ClickAction(
 
         return when (gain) {
             is CurrencyGain -> state.copy(
-                deposit = deposit + CurrencyAmount(1, gain.currency)
+                deposit = deposit + CurrencyAmount(CURRENCY_GAIN, gain.currency)
             )
             is ModuleGain -> state.copy(
                 deposit = deposit, modules = state.modules + gain.module
             )
             is ThreadSlotGain -> state.copy(
-                deposit = deposit, taskThreads = state.taskThreads.addThreadSlot()
+                deposit = deposit, tasks = state.tasks.addThreadSlot()
             )
         }
     }

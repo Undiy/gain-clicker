@@ -31,7 +31,11 @@ fun ActionsView(
     onClick: (ClickAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column(modifier) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        modifier = modifier
+            .padding(16.dp)
+    ) {
         ClickAction.values().forEach {
             AnimatedVisibility(
                 visible = it.isVisible(gameState)
@@ -55,7 +59,7 @@ fun ActionView(
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier.padding(8.dp)
+        modifier = modifier
     ) {
         Button(
             onClick = onClick,
@@ -73,7 +77,8 @@ fun ActionView(
         action.cost.forEach() {
             Spacer(modifier = Modifier.width(16.dp))
             Text(
-                text = "-${it.value}\n${it.currency.title.toLowerCase(Locale.current)}"
+                text = "-${it.value}\n${it.currency.title.toLowerCase(Locale.current)}",
+                style = MaterialTheme.typography.bodyMedium
             )
         }
     }
@@ -93,29 +98,5 @@ fun ActionsViewPreview() {
             ),
             onClick = {}
         )
-    }
-}
-
-@Composable
-@Preview(showBackground = true)
-fun ActionViewPreview() {
-    GAInClickerTheme {
-        Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-            ActionView(
-                action = ClickAction.NEURON,
-                enabled = true,
-                onClick = {}
-            )
-            ActionView(
-                action = ClickAction.MEMORY_BIN,
-                enabled = false,
-                onClick = {}
-            )
-            ActionView(
-                action = ClickAction.PROCESSING_UNIT,
-                enabled = true,
-                onClick = {}
-            )
-        }
     }
 }
