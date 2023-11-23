@@ -1,5 +1,8 @@
 package com.example.android.gainclicker.core
 
+import android.util.Log
+
+const val BASE_TASK_PROGRESS_RATE = 10_000.toFloat()
 data class GameState(
     val deposit: Deposit = Deposit(),
 
@@ -8,6 +11,30 @@ data class GameState(
     val tasks: TaskThreadsState = TaskThreadsState()
 ) {
     fun ioModulesCount() = modules.count { it.isIo }
+
+    fun updateTasks(timestamp: Long): GameState {
+        val datasetMultiplier = 1.0f + deposit[Currency.DATASET] / 100.0f
+        val progress = ((timestamp - tasks.updatedAt).coerceAtLeast(0)
+            .toFloat() / BASE_TASK_PROGRESS_RATE) * datasetMultiplier
+
+        Log.i("PROGRESS", "Updated progress: $progress $datasetMultiplier")
+
+        val (updatedTasks, gain) = tasks.tasks.map { taskState ->
+            if (taskState.task in tasks.taskThreads) {
+                taskState.increaseProgress(progress)
+            } else {
+                Pair(taskState, listOf())
+            }
+        }.unzip()
+
+        return copy(
+            deposit = gain.flatten().fold(deposit) { dep, amount -> dep + amount},
+            tasks = tasks.copy(
+                tasks = updatedTasks,
+                updatedAt = timestamp
+            )
+        )
+    }
 }
 
 data class Deposit(
@@ -51,12 +78,27 @@ data class Deposit(
 data class TaskState(
     val task: Task,
     val progress: Float = 0.0f
-)
+) {
+    fun increaseProgress(inc: Float): Pair<TaskState, List<CurrencyAmount>> {
+        val total = progress + inc
+        val completed = total.toInt()
+
+        return Pair(
+            copy(progress = total - completed),
+            if (completed == 0) {
+                listOf()
+            } else {
+                task.gain.map { it.copy(value = it.value * completed) }
+            }
+        )
+    }
+}
 
 data class TaskThreadsState(
     val threadSlots: Int = 0,
     val tasks: List<TaskState> = Task.values().map { TaskState(it) },
-    val taskThreads: Set<Task> = linkedSetOf()
+    val taskThreads: Set<Task> = linkedSetOf(),
+    val updatedAt: Long = System.currentTimeMillis()
 ) {
     fun addThreadSlot(): TaskThreadsState = copy(threadSlots = threadSlots + 1)
 

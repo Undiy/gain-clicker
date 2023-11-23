@@ -7,40 +7,55 @@ const val DATA_CONVERSION_PROCESSING_UNITS_REQUIRED = 100
 const val DATA_GENERATION_DATASETS_REQUIRED = 1000
 const val DATA_GENERATION_PROCESSING_UNITS_REQUIRED = 100
 
+const val TASK_CURRENCY_GAIN = 1
 
 enum class Task(
-    val requirement: List<CurrencyAmount> = listOf(),
-    val ioModulesRequired: Int = 0
+    val requirement: List<CurrencyAmount>,
+    val ioModulesRequired: Int = 0,
+    val gain: List<CurrencyAmount>
 ) {
     INTROSPECTION(
-        CurrencyAmount(INTROSPECTION_NEURONS_REQUIRED, Currency.NEURON)
+        requirement = CurrencyAmount(INTROSPECTION_NEURONS_REQUIRED, Currency.NEURON),
+        gain = CurrencyAmount(TASK_CURRENCY_GAIN, Currency.NEURON)
     ),
     DATASET_ACCRUAL(
-        CurrencyAmount(DATASET_ACCRUAL_MEMORY_BINS_REQUIRED, Currency.MEMORY_BIN)
+        requirement = CurrencyAmount(DATASET_ACCRUAL_MEMORY_BINS_REQUIRED, Currency.MEMORY_BIN),
+        gain = CurrencyAmount(TASK_CURRENCY_GAIN, Currency.DATASET)
     ),
     DATA_SEARCH(
-        CurrencyAmount(DATA_SEARCH_PROCESSING_UNITS_REQUIRED, Currency.PROCESSING_UNIT),
-        1
+        requirement = CurrencyAmount(DATA_SEARCH_PROCESSING_UNITS_REQUIRED, Currency.PROCESSING_UNIT),
+        ioModulesRequired = 1,
+        gain = CurrencyAmount(TASK_CURRENCY_GAIN, Currency.USER)
     ),
     DATA_CONVERSION(
-        CurrencyAmount(DATA_CONVERSION_PROCESSING_UNITS_REQUIRED, Currency.PROCESSING_UNIT),
-        2
+        requirement = listOf(CurrencyAmount(DATA_CONVERSION_PROCESSING_UNITS_REQUIRED, Currency.PROCESSING_UNIT)),
+        ioModulesRequired = 2,
+        gain = listOf(
+            CurrencyAmount(TASK_CURRENCY_GAIN, Currency.USER),
+            CurrencyAmount(TASK_CURRENCY_GAIN, Currency.DATASET)
+        )
     ),
     DATA_GENERATION(
-        listOf(
+        requirement = listOf(
             CurrencyAmount(DATA_GENERATION_DATASETS_REQUIRED, Currency.DATASET),
             CurrencyAmount(DATA_GENERATION_PROCESSING_UNITS_REQUIRED, Currency.PROCESSING_UNIT)
         ),
-        3
+        ioModulesRequired = 3,
+        gain = listOf(
+            CurrencyAmount(TASK_CURRENCY_GAIN, Currency.USER),
+            CurrencyAmount(TASK_CURRENCY_GAIN, Currency.DATASET),
+            CurrencyAmount(TASK_CURRENCY_GAIN, Currency.NEURON)
+        )
     );
 
     constructor(
-        visibilityRequirement: CurrencyAmount,
-        ioModulesRequired: Int = 0
-    ) : this(listOf(visibilityRequirement), ioModulesRequired)
+        requirement: CurrencyAmount,
+        ioModulesRequired: Int = 0,
+        gain: CurrencyAmount
+    ) : this(listOf(requirement), ioModulesRequired, listOf(gain))
 
     fun isVisible(state: GameState): Boolean {
-        return (true || state.ioModulesCount() >= ioModulesRequired)
+        return state.ioModulesCount() >= ioModulesRequired
                 && state.deposit.hasAmount(*requirement.toTypedArray())
     }
 }

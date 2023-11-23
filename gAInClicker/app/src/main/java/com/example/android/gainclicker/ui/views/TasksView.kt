@@ -2,6 +2,10 @@ package com.example.android.gainclicker.ui.views
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -25,9 +29,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.android.gainclicker.core.Deposit
 import com.example.android.gainclicker.core.GameState
+import com.example.android.gainclicker.core.MAX_TASK_THREAD_SLOTS
 import com.example.android.gainclicker.core.Module
 import com.example.android.gainclicker.core.Task
 import com.example.android.gainclicker.core.TaskState
+import com.example.android.gainclicker.core.TaskThreadsState
+import com.example.android.gainclicker.ui.TASK_UPDATE_INTERVAL
 import com.example.android.gainclicker.ui.theme.GAInClickerTheme
 import com.example.android.gainclicker.ui.title
 
@@ -37,25 +44,27 @@ fun TasksView(
     onTaskClick: (Task) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column(
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = modifier
-            .padding(16.dp)
-    ) {
-        Text(
-            text = "Tasks (${gameState.tasks.taskThreads.size}/${gameState.tasks.threadSlots} threads)",
-            style = MaterialTheme.typography.titleMedium
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        gameState.tasks.tasks.forEach {
-            AnimatedVisibility(
-                visible = it.task.isVisible(gameState)
-            ) {
-                TaskView(
-                    task = it,
-                    isRunning = it.task in gameState.tasks.taskThreads,
-                    onClick = { onTaskClick(it.task) }
-                )
+    AnimatedVisibility(visible = gameState.tasks.threadSlots > 0) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = modifier
+                .padding(16.dp)
+        ) {
+            Text(
+                text = "Tasks (${gameState.tasks.taskThreads.size}/${gameState.tasks.threadSlots} threads)",
+                style = MaterialTheme.typography.titleMedium
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            gameState.tasks.tasks.forEach {
+                AnimatedVisibility(
+                    visible = it.task.isVisible(gameState)
+                ) {
+                    TaskView(
+                        task = it,
+                        isRunning = it.task in gameState.tasks.taskThreads,
+                        onClick = { onTaskClick(it.task) }
+                    )
+                }
             }
         }
     }
@@ -78,14 +87,16 @@ fun TaskView(
                 MaterialTheme.colorScheme.primary
             } else {
                 MaterialTheme.colorScheme.secondaryContainer
-            }
+            },
+            label = "task button backgroundColor"
         )
         val contentColor by animateColorAsState(
             targetValue = if (isRunning) {
                 MaterialTheme.colorScheme.onPrimary
             } else {
                 MaterialTheme.colorScheme.onSecondaryContainer
-            }
+            },
+            label = "task button contentColor"
         )
 
         Button(
@@ -111,8 +122,18 @@ fun TaskView(
             modifier = Modifier
                 .fillMaxHeight()
         ) {
+
+            val progress by animateFloatAsState(
+                targetValue = task.progress,
+                animationSpec = tween(
+                    durationMillis = TASK_UPDATE_INTERVAL,
+                    easing = LinearEasing
+                ),
+                label = "task progress"
+            )
+
             LinearProgressIndicator(
-                progress = task.progress,
+                progress = progress,
                 color = backgroundColor,
                 modifier = Modifier.height(12.dp)
             )
@@ -138,7 +159,10 @@ fun TasksViewPreview() {
                     datasets = 1000,
                     processingUnits = 1000
                 ),
-                modules = Module.values().toSet()
+                modules = Module.values().toSet(),
+                tasks = TaskThreadsState(
+                    threadSlots = MAX_TASK_THREAD_SLOTS
+                )
             ),
             onTaskClick = {}
         )
