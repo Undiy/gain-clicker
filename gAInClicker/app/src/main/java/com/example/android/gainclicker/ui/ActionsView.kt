@@ -1,5 +1,6 @@
 package com.example.android.gainclicker.ui
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -30,14 +31,16 @@ fun ActionsView(
     modifier: Modifier = Modifier
 ) {
     Column(modifier) {
-        ClickAction.values().filter {
-            it.isVisible(gameState)
-        }.forEach {
-            ActionView(
-                action = it,
-                enabled = it.isAcquirable(gameState),
-                onClick = { onClick(it) }
-            )
+        ClickAction.values().forEach {
+            AnimatedVisibility(
+                visible = it.isVisible(gameState)
+            ) {
+                ActionView(
+                    action = it,
+                    enabled = it.isAcquirable(gameState),
+                    onClick = { onClick(it) }
+                )
+            }
         }
     }
 }

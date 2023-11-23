@@ -29,7 +29,7 @@ fun GAInClickerApp(modifier: Modifier) {
         )
         ActionsView(
             gameState = gameState,
-            onClick = {}
+            onClick = viewModel::onActionClick
         )
     }
 }
