@@ -11,6 +11,21 @@ data class GameState(
 data class Deposit(
     private val accounts: Map<Currency, Int> = mapOf()
 ) {
+    constructor(
+        neurons: Int = 0,
+        datasets: Int = 0,
+        memoryBins: Int = 0,
+        processingUnits: Int = 0,
+        users: Int = 0
+    ) : this(
+        mapOf(
+            Currency.NEURON to neurons,
+            Currency.DATASET to datasets,
+            Currency.MEMORY_BIN to memoryBins,
+            Currency.PROCESSING_UNIT to processingUnits,
+            Currency.USER to users
+        )
+    )
     operator fun get(currency: Currency) = accounts[currency] ?: 0
 
     private fun hasAmount(amount: CurrencyAmount) =
