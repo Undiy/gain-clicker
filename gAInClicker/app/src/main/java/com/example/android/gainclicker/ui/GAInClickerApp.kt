@@ -11,6 +11,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.android.gainclicker.ui.views.InfoView
+import com.example.android.gainclicker.ui.views.ActionsView
 
 @Composable
 fun GAInClickerApp(modifier: Modifier) {

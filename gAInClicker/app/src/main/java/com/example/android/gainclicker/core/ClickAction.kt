@@ -84,15 +84,15 @@ enum class ClickAction(
     ) : this(listOf(visibilityRequirement), listOf(cost), gain)
 
     fun isVisible(state: GameState): Boolean {
-        return state.deposit.hasAmount(*cost.toTypedArray())
-    }
-
-    fun isAcquirable(state: GameState): Boolean {
         return when (gain) {
             is CurrencyGain -> true
             is ModuleGain -> gain.module !in state.modules
             ThreadSlotGain -> state.taskThreads.threadSlots < MAX_TASK_THREAD_SLOTS
         } && state.deposit.hasAmount(*cost.toTypedArray())
+    }
+
+    fun isAcquirable(state: GameState): Boolean {
+        return state.deposit.hasAmount(*cost.toTypedArray())
     }
 
     fun acquire(state: GameState): GameState {

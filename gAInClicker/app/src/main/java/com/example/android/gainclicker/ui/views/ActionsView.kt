@@ -1,4 +1,4 @@
-package com.example.android.gainclicker.ui
+package com.example.android.gainclicker.ui.views
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
@@ -23,6 +23,7 @@ import com.example.android.gainclicker.core.ClickAction
 import com.example.android.gainclicker.core.Deposit
 import com.example.android.gainclicker.core.GameState
 import com.example.android.gainclicker.ui.theme.GAInClickerTheme
+import com.example.android.gainclicker.ui.title
 
 @Composable
 fun ActionsView(
