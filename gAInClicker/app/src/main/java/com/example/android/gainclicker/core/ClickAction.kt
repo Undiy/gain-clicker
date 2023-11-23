@@ -88,7 +88,7 @@ enum class ClickAction(
             is CurrencyGain -> true
             is ModuleGain -> gain.module !in state.modules
             ThreadSlotGain -> state.taskThreads.threadSlots < MAX_TASK_THREAD_SLOTS
-        } && state.deposit.hasAmount(*cost.toTypedArray())
+        } && state.deposit.hasAmount(*visibilityRequirement.toTypedArray())
     }
 
     fun isAcquirable(state: GameState): Boolean {
