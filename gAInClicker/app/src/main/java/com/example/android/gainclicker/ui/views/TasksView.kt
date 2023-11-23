@@ -54,7 +54,7 @@ fun TasksView(
                 TaskView(
                     task = it,
                     isRunning = it.task in gameState.tasks.taskThreads,
-                    {}
+                    onClick = { onTaskClick(it.task) }
                 )
             }
         }

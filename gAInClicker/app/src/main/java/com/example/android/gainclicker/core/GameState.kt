@@ -59,4 +59,17 @@ data class TaskThreadsState(
     val taskThreads: Set<Task> = linkedSetOf()
 ) {
     fun addThreadSlot(): TaskThreadsState = copy(threadSlots = threadSlots + 1)
+
+    fun toggleTaskThread(task: Task) = copy(
+        taskThreads = if (task in taskThreads) {
+            taskThreads - task
+        } else {
+            LinkedHashSet(taskThreads).apply {
+                add(task)
+                if (size > threadSlots) {
+                    remove(first())
+                }
+            }
+        }
+    )
 }

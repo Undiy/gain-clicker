@@ -3,6 +3,7 @@ package com.example.android.gainclicker.ui
 import androidx.lifecycle.ViewModel
 import com.example.android.gainclicker.core.ClickAction
 import com.example.android.gainclicker.core.GameState
+import com.example.android.gainclicker.core.Task
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,6 +16,14 @@ class GAInClickerViewModel : ViewModel() {
     fun onActionClick(action: ClickAction) {
         _gameState.update {
             action.acquire(it)
+        }
+    }
+
+    fun onTaskClick(task: Task) {
+        _gameState.update {
+            it.copy(
+                tasks = it.tasks.toggleTaskThread(task)
+            )
         }
     }
 }

@@ -38,7 +38,7 @@ fun GAInClickerApp(modifier: Modifier = Modifier) {
         Divider()
         TasksView(
             gameState = gameState,
-            onTaskClick = {}
+            onTaskClick = viewModel::onTaskClick
         )
         Divider()
         ActionsView(
