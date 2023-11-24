@@ -15,19 +15,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.intl.Locale
+import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.android.gainclicker.core.ClickAction
-import com.example.android.gainclicker.core.Deposit
-import com.example.android.gainclicker.core.GameState
 import com.example.android.gainclicker.ui.theme.GAInClickerTheme
 import com.example.android.gainclicker.ui.title
 
 @Composable
 fun ActionsView(
-    gameState: GameState,
+    isActionVisible: (ClickAction) -> Boolean,
+    isActionEnabled: (ClickAction) -> Boolean,
     onClick: (ClickAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -38,11 +38,11 @@ fun ActionsView(
     ) {
         ClickAction.values().forEach {
             AnimatedVisibility(
-                visible = it.isVisible(gameState)
+                visible = isActionVisible(it)
             ) {
                 ActionView(
                     action = it,
-                    enabled = it.isAcquirable(gameState),
+                    enabled = isActionEnabled(it),
                     onClick = { onClick(it) }
                 )
             }
@@ -70,7 +70,9 @@ fun ActionView(
             Text(
                 text = action.title,
                 textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.titleMedium
+                style = MaterialTheme.typography.titleSmall.copy(
+                    lineBreak = LineBreak.Heading
+                )
             )
         }
 
@@ -89,13 +91,10 @@ fun ActionView(
 fun ActionsViewPreview() {
     GAInClickerTheme {
         ActionsView(
-            gameState = GameState(
-                deposit = Deposit(
-                    neurons = 1000,
-                    datasets = 1000,
-                    processingUnits = 1000
-                )
-            ),
+            isActionVisible = { true },
+            isActionEnabled = {
+                it.ordinal % 2 == 0
+            },
             onClick = {}
         )
     }

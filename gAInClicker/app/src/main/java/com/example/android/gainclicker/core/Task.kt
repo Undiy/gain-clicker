@@ -55,7 +55,8 @@ enum class Task(
     ) : this(listOf(requirement), ioModulesRequired, listOf(gain))
 
     fun isVisible(state: GameState): Boolean {
-        return state.ioModulesCount() >= ioModulesRequired
-                && state.deposit.hasAmount(*requirement.toTypedArray())
+        return this in state.visibleFeatures.tasks || (
+                state.ioModulesCount() >= ioModulesRequired
+                && state.deposit.hasAmount(*requirement.toTypedArray()))
     }
 }

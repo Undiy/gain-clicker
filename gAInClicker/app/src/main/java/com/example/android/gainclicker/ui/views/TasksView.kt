@@ -2,7 +2,6 @@ package com.example.android.gainclicker.ui.views
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -12,6 +11,7 @@ import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -23,17 +23,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.android.gainclicker.core.Deposit
-import com.example.android.gainclicker.core.GameState
 import com.example.android.gainclicker.core.MAX_TASK_THREAD_SLOTS
-import com.example.android.gainclicker.core.Module
 import com.example.android.gainclicker.core.Task
 import com.example.android.gainclicker.core.TaskState
 import com.example.android.gainclicker.core.TaskThreadsState
@@ -43,28 +39,29 @@ import com.example.android.gainclicker.ui.title
 
 @Composable
 fun TasksView(
-    gameState: GameState,
+    state: TaskThreadsState,
+    isTaskVisible: (Task) -> Boolean,
     onTaskClick: (Task) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    AnimatedVisibility(visible = gameState.tasks.threadSlots > 0) {
+    AnimatedVisibility(visible = state.threadSlots > 0) {
         Column(
             verticalArrangement = Arrangement.spacedBy(16.dp),
             modifier = modifier
                 .padding(16.dp)
         ) {
             Text(
-                text = "Tasks (${gameState.tasks.taskThreads.size}/${gameState.tasks.threadSlots} threads)",
+                text = "Tasks (${state.taskThreads.size}/${state.threadSlots} threads)",
                 style = MaterialTheme.typography.titleMedium
             )
             Spacer(modifier = Modifier.height(8.dp))
-            gameState.tasks.tasks.forEach {
+            state.tasks.forEach {
                 AnimatedVisibility(
-                    visible = it.task.isVisible(gameState)
+                    visible = isTaskVisible(it.task)
                 ) {
                     TaskView(
                         task = it,
-                        isRunning = it.task in gameState.tasks.taskThreads,
+                        isRunning = it.task in state.taskThreads,
                         onClick = { onTaskClick(it.task) }
                     )
                 }
@@ -114,7 +111,7 @@ fun TaskView(
             Text(
                 text = task.task.title,
                 textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.titleMedium
+                style = MaterialTheme.typography.titleSmall
             )
         }
 
@@ -138,7 +135,9 @@ fun TaskView(
             LinearProgressIndicator(
                 progress = progress,
                 color = backgroundColor,
-                modifier = Modifier.height(12.dp)
+                modifier = Modifier
+                    .height(12.dp)
+                    .fillMaxWidth()
             )
 
             Row {
@@ -163,17 +162,11 @@ fun TaskView(
 fun TasksViewPreview() {
     GAInClickerTheme {
         TasksView(
-            gameState = GameState(
-                deposit = Deposit(
-                    neurons = 1000,
-                    datasets = 1000,
-                    processingUnits = 1000
-                ),
-                modules = Module.values().toSet(),
-                tasks = TaskThreadsState(
-                    threadSlots = MAX_TASK_THREAD_SLOTS
-                )
+            state = TaskThreadsState(
+                threadSlots = MAX_TASK_THREAD_SLOTS,
+                taskThreads = setOf(Task.DATASET_ACCRUAL)
             ),
+            isTaskVisible = { true },
             onTaskClick = {}
         )
     }

@@ -41,9 +41,35 @@ class GAInClickerViewModel : ViewModel() {
         }
     }
 
+    fun isActionVisible(action: ClickAction): Boolean {
+        return action.isVisible(_gameState.value).also {visible ->
+            if (visible && action !in _gameState.value.visibleFeatures.actions) {
+                _gameState.update {
+                    it.copy(visibleFeatures = it.visibleFeatures.copy(
+                        actions = it.visibleFeatures.actions + action
+                    ))
+                }
+            }
+        }
+    }
+
+    fun isActionEnabled(action: ClickAction) = action.isAcquirable(_gameState.value)
+
     fun onActionClick(action: ClickAction) {
         _gameState.update {
             action.acquire(it)
+        }
+    }
+
+    fun isTaskVisible(task: Task): Boolean {
+        return task.isVisible(_gameState.value).also {visible ->
+            if (visible && task !in _gameState.value.visibleFeatures.tasks) {
+                _gameState.update {
+                    it.copy(visibleFeatures = it.visibleFeatures.copy(
+                        tasks = it.visibleFeatures.tasks + task
+                    ))
+                }
+            }
         }
     }
 

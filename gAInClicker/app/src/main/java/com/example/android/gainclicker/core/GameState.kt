@@ -8,7 +8,9 @@ data class GameState(
 
     val modules: Set<Module> = setOf(),
 
-    val tasks: TaskThreadsState = TaskThreadsState()
+    val tasks: TaskThreadsState = TaskThreadsState(),
+
+    val visibleFeatures: VisibleFeatures = VisibleFeatures()
 ) {
     fun ioModulesCount() = modules.count { it.isIo }
 
@@ -115,3 +117,8 @@ data class TaskThreadsState(
         }
     )
 }
+
+data class VisibleFeatures(
+    val tasks: Set<Task> = setOf(),
+    val actions: Set<ClickAction> = setOf()
+)
