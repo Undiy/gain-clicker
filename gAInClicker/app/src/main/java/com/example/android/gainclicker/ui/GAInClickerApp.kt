@@ -32,8 +32,8 @@ fun GAInClickerApp(modifier: Modifier = Modifier) {
     ) {
         InfoView(
             deposit = gameState.deposit,
-            modifier = Modifier
-                .fillMaxWidth(0.6f)
+            isModuleVisible = viewModel::isModuleVisible,
+            isModuleEnabled = viewModel::isModuleEnabled
         )
         Divider()
         TasksView(
