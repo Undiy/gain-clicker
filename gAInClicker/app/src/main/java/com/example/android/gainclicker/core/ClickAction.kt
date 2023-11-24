@@ -85,17 +85,21 @@ enum class ClickAction(
         gain: ClickActionGain,
     ) : this(listOf(visibilityRequirement), listOf(cost), gain)
 
-    fun isVisible(state: GameState): Boolean {
+    private fun isNotLimited(state: GameState): Boolean {
         return when (gain) {
             is CurrencyGain -> true
             is ModuleGain -> gain.module !in state.modules
             ThreadSlotGain -> state.tasks.threadSlots < MAX_TASK_THREAD_SLOTS
-        } && (this in state.visibleFeatures.actions
+        }
+    }
+
+    fun isVisible(state: GameState): Boolean {
+        return isNotLimited(state) && (this in state.visibleFeatures.actions
                 || state.deposit.hasAmount(*visibilityRequirement.toTypedArray()))
     }
 
     fun isAcquirable(state: GameState): Boolean {
-        return state.deposit.hasAmount(*cost.toTypedArray())
+        return isNotLimited(state) && state.deposit.hasAmount(*cost.toTypedArray())
     }
 
     fun acquire(state: GameState): GameState {
