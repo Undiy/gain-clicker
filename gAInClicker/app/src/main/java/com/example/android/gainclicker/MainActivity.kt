@@ -18,7 +18,12 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             GAInClickerTheme {
-                GAInClickerApp(modifier = Modifier.fillMaxSize())
+                Surface(
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    GAInClickerApp(modifier = Modifier.fillMaxSize())
+                }
+
             }
         }
     }
