@@ -9,9 +9,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,7 +22,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.android.gainclicker.core.Currency
 import com.example.android.gainclicker.core.Deposit
-import com.example.android.gainclicker.core.GameState
 import com.example.android.gainclicker.core.Module
 import com.example.android.gainclicker.ui.theme.GAInClickerTheme
 import com.example.android.gainclicker.ui.title
@@ -34,12 +33,16 @@ fun InfoView(
     isModuleEnabled: (Module) -> Boolean,
     modifier: Modifier = Modifier
 ) {
-    Column(modifier) {
+    Column(
+        modifier = modifier.padding(16.dp)
+    ) {
         Row {
             NumbersView(
                 deposit = deposit,
                 modifier = Modifier.weight(1.0f)
             )
+
+            Spacer(modifier = Modifier.width(8.dp))
 
             IoModulesView(
                 isModuleVisible = isModuleVisible,
@@ -48,11 +51,12 @@ fun InfoView(
             )
         }
 
+        Spacer(modifier = Modifier.height(8.dp))
+
         ModuleCard(
             module = Module.CLOUD_STORAGE,
             visible = isModuleVisible(Module.CLOUD_STORAGE),
-            enabled = isModuleEnabled(Module.CLOUD_STORAGE),
-            modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
+            enabled = isModuleEnabled(Module.CLOUD_STORAGE)
         )
     }
 }
@@ -65,7 +69,6 @@ fun NumbersView(
     Column(
         verticalArrangement = Arrangement.spacedBy(4.dp),
         modifier = modifier
-            .padding(16.dp)
     ) {
         listOf(
             Currency.NEURON,
@@ -129,7 +132,6 @@ fun IoModulesView(
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp),
         modifier = modifier
-            .padding(16.dp)
     ) {
         Module.values().filter(Module::isIo).forEach {
             ModuleCard(

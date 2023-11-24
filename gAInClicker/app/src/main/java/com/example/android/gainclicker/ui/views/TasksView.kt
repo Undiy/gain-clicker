@@ -54,7 +54,6 @@ fun TasksView(
                 text = "Tasks (${state.taskThreads.size}/${state.threadSlots} threads)",
                 style = MaterialTheme.typography.titleMedium
             )
-            Spacer(modifier = Modifier.height(8.dp))
             state.tasks.forEach {
                 AnimatedVisibility(
                     visible = isTaskVisible(it.task)
