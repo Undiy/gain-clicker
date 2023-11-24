@@ -15,7 +15,7 @@ data class GameState(
     fun ioModulesCount() = modules.count { it.isIo }
 
     fun updateTasks(timestamp: Long): GameState {
-        val datasetMultiplier = 1.0f + deposit[Currency.DATASET] / 100.0f
+        val datasetMultiplier = 1.0f + deposit[Currency.PROCESSING_UNIT] / 100.0f
         val progress = ((timestamp - tasks.updatedAt).coerceAtLeast(0)
             .toFloat() / BASE_TASK_PROGRESS_RATE) * datasetMultiplier
 
