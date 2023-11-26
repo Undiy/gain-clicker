@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.android.gainclicker.core.Currency
@@ -152,11 +153,8 @@ fun ModuleCard(
 ) {
     AnimatedVisibility(visible = visible) {
         Card(
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.primaryContainer,
-                contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-
-            ),
+            shape = RectangleShape,
+            elevation = CardDefaults.cardElevation(4.dp),
             modifier = modifier.alpha(if (enabled) 1.0f else 0.4f)
         ) {
             Box(
