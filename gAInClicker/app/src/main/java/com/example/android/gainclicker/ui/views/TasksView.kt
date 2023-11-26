@@ -2,6 +2,8 @@ package com.example.android.gainclicker.ui.views
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -22,7 +24,11 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
@@ -98,6 +104,23 @@ fun TaskView(
             label = "task button contentColor"
         )
 
+        var previousProgress by remember {
+            mutableStateOf(0.0f)
+        }
+        var currentProgress by remember {
+            mutableStateOf(0.0f)
+        }
+
+
+        LaunchedEffect(key1 = task.progress) {
+            previousProgress = currentProgress
+            currentProgress = when {
+                previousProgress == 1.0f
+                        || (1.0f - task.progress) < 0.01f -> 0.0f // snap empty
+                task.progress < previousProgress -> 1.0f // snap full
+                else -> task.progress
+            }
+        }
         Button(
             onClick = onClick,
             colors = ButtonDefaults.buttonColors(
@@ -123,10 +146,18 @@ fun TaskView(
         ) {
 
             val progress by animateFloatAsState(
-                targetValue = task.progress,
+                targetValue = currentProgress,
                 animationSpec = tween(
-                    durationMillis = TASK_UPDATE_INTERVAL,
-                    easing = LinearEasing
+                    durationMillis = if (previousProgress < currentProgress) {
+                        TASK_UPDATE_INTERVAL
+                    } else {
+                        TASK_UPDATE_INTERVAL / 2
+                    },
+                    easing = if (previousProgress < currentProgress) {
+                        LinearEasing
+                    } else {
+                        FastOutSlowInEasing
+                    }
                 ),
                 label = "task progress"
             )
