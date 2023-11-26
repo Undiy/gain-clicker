@@ -6,35 +6,58 @@ const val BASE_TASK_PROGRESS_RATE = 10_000.toFloat()
 data class GameState(
     val deposit: Deposit = Deposit(),
 
-    val modules: Set<Module> = setOf(),
+    val modules: List<Module> = listOf(),
 
     val tasks: TaskThreadsState = TaskThreadsState(),
 
     val visibleFeatures: VisibleFeatures = VisibleFeatures()
 ) {
-    fun ioModulesCount() = modules.count { it.isIo }
+    fun ioModulesCount() = modules.count { it is IOModule }
 
-    fun updateTasks(timestamp: Long): GameState {
+    fun getCloudStorage() = modules.filterIsInstance<CloudStorage>().firstOrNull()
+
+    private fun setCloudStorage(cloudStorage: CloudStorage) = modules.map {
+        if (it is CloudStorage) cloudStorage else it
+    }
+
+    fun updateProgress(timestamp: Long): GameState {
         val datasetMultiplier = 1.0f + deposit[Currency.PROCESSING_UNIT] / 100.0f
         val progress = ((timestamp - tasks.updatedAt).coerceAtLeast(0)
-            .toFloat() / BASE_TASK_PROGRESS_RATE) * datasetMultiplier
+            .toFloat() / BASE_TASK_PROGRESS_RATE)
 
         Log.i("PROGRESS", "Updated progress: $progress $datasetMultiplier")
 
-        val (updatedTasks, gain) = tasks.tasks.map { taskState ->
+        val (updatedTasks, tasksGain) = tasks.tasks.map { taskState ->
             if (taskState.task in tasks.taskThreads) {
-                taskState.increaseProgress(progress)
+                if (taskState.hasGainCapacity(this)) {
+                    taskState.increaseProgress(progress * datasetMultiplier)
+                } else {
+                    // set progress to 0.0f
+                    taskState.increaseProgress(-taskState.progress)
+                }
             } else {
                 Pair(taskState, listOf())
             }
         }.unzip()
 
+        val (cloudStorage, cloudStorageGain) = getCloudStorage().let {
+            it?.increaseProgress(progress) ?: (null to listOf())
+        }
+
         return copy(
-            deposit = gain.flatten().fold(deposit) { dep, amount -> dep + amount},
+            deposit = tasksGain
+                .flatten()
+                .plus(cloudStorageGain)
+                .fold(deposit) { dep, amount -> dep + amount},
             tasks = tasks.copy(
                 tasks = updatedTasks,
                 updatedAt = timestamp
-            )
+            ),
+            modules = if (cloudStorage == null) {
+                modules
+            } else {
+                setCloudStorage(cloudStorage)
+            }
         )
     }
 }
@@ -83,22 +106,36 @@ data class Deposit(
     }
 }
 
+fun calculateGain(
+    progress: Float,
+    baseGain: List<CurrencyAmount>
+): Pair<Float, List<CurrencyAmount>> {
+    return progress.toInt().let { completed ->
+        Pair(
+            progress - completed,
+            if (completed == 0) {
+                listOf()
+            } else {
+                baseGain.map { it.copy(value = it.value * completed) }
+            }
+        )
+    }
+}
+
 data class TaskState(
     val task: Task,
     val progress: Float = 0.0f
 ) {
-    fun increaseProgress(inc: Float): Pair<TaskState, List<CurrencyAmount>> {
-        val total = progress + inc
-        val completed = total.toInt()
+    fun increaseProgress(inc: Float) = calculateGain(
+        progress + inc,
+        task.gain
+    ).let { (remaining, gain) -> Pair(copy(progress = remaining), gain) }
 
-        return Pair(
-            copy(progress = total - completed),
-            if (completed == 0) {
-                listOf()
-            } else {
-                task.gain.map { it.copy(value = it.value * completed) }
-            }
-        )
+    fun hasGainCapacity(state: GameState): Boolean {
+        return when (this.task) {
+            Task.DATASET_ACCRUAL -> state.deposit[Currency.MEMORY_BIN] > state.deposit[Currency.DATASET]
+            else -> true
+        }
     }
 }
 

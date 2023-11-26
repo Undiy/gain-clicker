@@ -3,7 +3,9 @@ package com.example.android.gainclicker.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.android.gainclicker.core.ClickAction
+import com.example.android.gainclicker.core.CloudStorage
 import com.example.android.gainclicker.core.GameState
+import com.example.android.gainclicker.core.IOModule
 import com.example.android.gainclicker.core.Module
 import com.example.android.gainclicker.core.Task
 import kotlinx.coroutines.Dispatchers
@@ -18,7 +20,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.time.Duration.Companion.milliseconds
 
-const val TASK_UPDATE_INTERVAL = 500
+const val TASK_UPDATE_INTERVAL = 250
 
 class GAInClickerViewModel : ViewModel() {
     private val _gameState = MutableStateFlow(GameState())
@@ -36,7 +38,7 @@ class GAInClickerViewModel : ViewModel() {
         withContext(Dispatchers.Default) {
             timer.collectLatest { timestamp ->
                 _gameState.update {
-                    it.updateTasks(timestamp)
+                    it.updateProgress(timestamp)
                 }
             }
         }
@@ -84,10 +86,10 @@ class GAInClickerViewModel : ViewModel() {
 
     fun isModuleVisible(module: Module): Boolean {
         return when (module) {
-            Module.IO_TEXT -> ClickAction.IO_MODULE_TEXT
-            Module.IO_SOUND -> ClickAction.IO_MODULE_SOUND
-            Module.IO_VIDEO -> ClickAction.IO_MODULE_VIDEO
-            Module.CLOUD_STORAGE -> ClickAction.CLOUD_STORAGE
+            IOModule.IO_TEXT -> ClickAction.IO_MODULE_TEXT
+            IOModule.IO_SOUND -> ClickAction.IO_MODULE_SOUND
+            IOModule.IO_VIDEO -> ClickAction.IO_MODULE_VIDEO
+            is CloudStorage -> ClickAction.CLOUD_STORAGE
         } in _gameState.value.visibleFeatures.actions
     }
 

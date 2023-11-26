@@ -32,6 +32,7 @@ fun GAInClickerApp(modifier: Modifier = Modifier) {
     ) {
         InfoView(
             deposit = gameState.deposit,
+            cloudStorage = gameState.getCloudStorage(),
             isModuleVisible = viewModel::isModuleVisible,
             isModuleEnabled = viewModel::isModuleEnabled
         )

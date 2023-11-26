@@ -1,7 +1,9 @@
 package com.example.android.gainclicker.ui
 
 import com.example.android.gainclicker.core.ClickAction
+import com.example.android.gainclicker.core.CloudStorage
 import com.example.android.gainclicker.core.Currency
+import com.example.android.gainclicker.core.IOModule
 import com.example.android.gainclicker.core.Module
 import com.example.android.gainclicker.core.Task
 
@@ -37,8 +39,8 @@ val Task.title: String
 
 val Module.title: String
     get() = when(this) {
-        Module.IO_TEXT -> "Text I/O"
-        Module.IO_SOUND -> "Sound I/O"
-        Module.IO_VIDEO -> "Video I/O"
-        Module.CLOUD_STORAGE -> "Cloud Storage"
+        IOModule.IO_TEXT -> "Text I/O"
+        IOModule.IO_SOUND -> "Sound I/O"
+        IOModule.IO_VIDEO -> "Video I/O"
+        is CloudStorage -> "Cloud Storage"
     }

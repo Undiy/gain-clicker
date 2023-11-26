@@ -53,17 +53,17 @@ enum class ClickAction(
     IO_MODULE_TEXT(
         CurrencyAmount(IO_MODULE_TEXT_DATASETS_REQUIRED, Currency.DATASET),
         CurrencyAmount(IO_MODULE_TEXT_NEURONS_REQUIRED, Currency.NEURON),
-        ModuleGain(Module.IO_TEXT)
+        ModuleGain(IOModule.IO_TEXT)
     ),
     IO_MODULE_SOUND(
         CurrencyAmount(IO_MODULE_SOUND_NEURONS_REQUIRED, Currency.NEURON),
         CurrencyAmount(IO_MODULE_SOUND_NEURONS_COST, Currency.NEURON),
-        ModuleGain(Module.IO_SOUND)
+        ModuleGain(IOModule.IO_SOUND)
     ),
     IO_MODULE_VIDEO(
         CurrencyAmount(IO_MODULE_VIDEO_NEURONS_REQUIRED, Currency.NEURON),
         CurrencyAmount(IO_MODULE_VIDEO_NEURONS_COST, Currency.NEURON),
-        ModuleGain(Module.IO_VIDEO)
+        ModuleGain(IOModule.IO_VIDEO)
     ),
     THREAD(
         CurrencyAmount(THREAD_PROCESSING_UNITS_REQUIRED, Currency.NEURON),
@@ -76,7 +76,7 @@ enum class ClickAction(
             CurrencyAmount(CLOUD_STORAGE_NEURONS_COST, Currency.NEURON),
             CurrencyAmount(CLOUD_PROCESSING_UNITS_COST, Currency.PROCESSING_UNIT)
         ),
-        ModuleGain(Module.CLOUD_STORAGE)
+        ModuleGain(CloudStorage())
     );
 
     constructor(

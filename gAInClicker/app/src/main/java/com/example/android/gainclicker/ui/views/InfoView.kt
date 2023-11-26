@@ -4,14 +4,18 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,10 +23,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.text.intl.Locale
+import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.android.gainclicker.core.CloudStorage
 import com.example.android.gainclicker.core.Currency
 import com.example.android.gainclicker.core.Deposit
+import com.example.android.gainclicker.core.IOModule
 import com.example.android.gainclicker.core.Module
 import com.example.android.gainclicker.ui.theme.GAInClickerTheme
 import com.example.android.gainclicker.ui.title
@@ -30,6 +38,7 @@ import com.example.android.gainclicker.ui.title
 @Composable
 fun InfoView(
     deposit: Deposit,
+    cloudStorage: CloudStorage?,
     isModuleVisible: (Module) -> Boolean,
     isModuleEnabled: (Module) -> Boolean,
     modifier: Modifier = Modifier
@@ -54,11 +63,14 @@ fun InfoView(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        ModuleCard(
-            module = Module.CLOUD_STORAGE,
-            visible = isModuleVisible(Module.CLOUD_STORAGE),
-            enabled = isModuleEnabled(Module.CLOUD_STORAGE)
-        )
+        with(cloudStorage ?: CloudStorage()) {
+            CloudStorageView(
+                cloudStorage = this,
+                visible = isModuleVisible(this),
+                enabled = isModuleEnabled(this)
+            )
+        }
+
     }
 }
 
@@ -134,8 +146,8 @@ fun IoModulesView(
         verticalArrangement = Arrangement.spacedBy(8.dp),
         modifier = modifier
     ) {
-        Module.values().filter(Module::isIo).forEach {
-            ModuleCard(
+        IOModule.values().forEach {
+            IoModuleView(
                 it,
                 isModuleVisible(it),
                 isModuleEnabled(it)
@@ -146,28 +158,100 @@ fun IoModulesView(
 
 @Composable
 fun ModuleCard(
-    module: Module,
+    visible: Boolean,
+    enabled: Boolean,
+    modifier: Modifier = Modifier,
+    content: @Composable() (ColumnScope.() -> Unit)
+) {
+    AnimatedVisibility(visible = visible) {
+        ElevatedCard(
+            shape = RectangleShape,
+            elevation = CardDefaults.cardElevation(4.dp),
+            modifier = modifier.alpha(if (enabled) 1.0f else 0.4f),
+            content = content
+        )
+    }
+}
+
+@Composable
+fun IoModuleView(
+    module: IOModule,
     visible: Boolean,
     enabled: Boolean,
     modifier: Modifier = Modifier
 ) {
-    AnimatedVisibility(visible = visible) {
-        Card(
-            shape = RectangleShape,
-            elevation = CardDefaults.cardElevation(4.dp),
-            modifier = modifier.alpha(if (enabled) 1.0f else 0.4f)
+    ModuleCard(
+        visible = visible,
+        enabled = enabled,
+        modifier = modifier
+    ) {
+        Box(
+            modifier = Modifier
+                .height(32.dp)
+                .fillMaxWidth()
         ) {
-            Box(
+            Text(
+                text = module.title,
+                style = MaterialTheme.typography.titleSmall,
                 modifier = Modifier
-                    .height(32.dp)
-                    .fillMaxWidth()
+                    .align(Alignment.Center)
+            )
+        }
+    }
+}
+
+@Composable
+fun CloudStorageView(
+    cloudStorage: CloudStorage,
+    visible: Boolean,
+    enabled: Boolean,
+    modifier: Modifier = Modifier
+) {
+    ModuleCard(
+        visible = visible,
+        enabled = enabled,
+        modifier = modifier
+    ) {
+        Row(
+            modifier = modifier
+                .height(IntrinsicSize.Min)
+                .padding(8.dp)
+        ) {
+
+            Text(
+                text = cloudStorage.title,
+                style = MaterialTheme.typography.titleSmall,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .align(Alignment.CenterVertically)
+            )
+
+            Spacer(modifier = Modifier.width(16.dp))
+
+            Column(
+                verticalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier
+                    .fillMaxHeight()
             ) {
-                Text(
-                    text = module.title,
-                    style = MaterialTheme.typography.titleSmall,
+
+                LinearProgressIndicator(
+                    progress = cloudStorage.progress,
                     modifier = Modifier
-                        .align(Alignment.Center)
+                        .height(12.dp)
+                        .fillMaxWidth()
                 )
+
+                Row {
+                    CloudStorage.gain.forEachIndexed { index, amount ->
+                        if (index != 0) {
+                            Spacer(modifier = Modifier.width(16.dp))
+                        }
+                        Text(
+                            text = "+${amount.value}\n${amount.currency.title.toLowerCase(Locale.current)}",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+                }
             }
         }
     }
@@ -179,7 +263,7 @@ fun IoModulesViewPreview() {
     GAInClickerTheme {
         IoModulesView(
             isModuleVisible = { true },
-            isModuleEnabled = { it.ordinal % 2 == 0 }
+            isModuleEnabled = { it is IOModule && it.ordinal % 2 == 0 }
         )
     }
 }
@@ -195,8 +279,9 @@ fun InfoViewPreview() {
                 memoryBins = 49,
                 processingUnits = 13
             ),
+            cloudStorage = CloudStorage(0.5f),
             isModuleVisible = { true },
-            isModuleEnabled = { it.ordinal % 2 == 0 }
+            isModuleEnabled = { it !is IOModule || it.ordinal % 2 == 0 }
         )
     }
 }
