@@ -33,7 +33,7 @@ private object ThreadSlotGain : ClickActionGain
 
 
 enum class ClickAction(
-    val visibilityRequirement: List<CurrencyAmount> = listOf(),
+    private val visibilityRequirement: List<CurrencyAmount> = listOf(),
     val cost: List<CurrencyAmount> = listOf(),
     val gain: ClickActionGain
 ) {
@@ -88,7 +88,10 @@ enum class ClickAction(
     private fun isNotLimited(state: GameState): Boolean {
         return when (gain) {
             is CurrencyGain -> true
-            is ModuleGain -> gain.module !in state.modules
+            is ModuleGain -> when (gain.module) {
+                is IOModule -> gain.module !in state.modules
+                is CloudStorage -> state.modules.none { it is CloudStorage }
+            }
             ThreadSlotGain -> state.tasks.threadSlots < MAX_TASK_THREAD_SLOTS
         }
     }
