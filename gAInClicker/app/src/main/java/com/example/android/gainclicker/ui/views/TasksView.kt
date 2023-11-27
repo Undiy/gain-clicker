@@ -2,44 +2,30 @@ package com.example.android.gainclicker.ui.views
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.FastOutLinearInEasing
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.android.gainclicker.core.MAX_TASK_THREAD_SLOTS
 import com.example.android.gainclicker.core.Task
 import com.example.android.gainclicker.core.TaskState
 import com.example.android.gainclicker.core.TaskThreadsState
-import com.example.android.gainclicker.ui.TASK_UPDATE_INTERVAL
 import com.example.android.gainclicker.ui.theme.GAInClickerTheme
 import com.example.android.gainclicker.ui.title
 
@@ -104,23 +90,6 @@ fun TaskView(
             label = "task button contentColor"
         )
 
-        var previousProgress by remember {
-            mutableStateOf(0.0f)
-        }
-        var currentProgress by remember {
-            mutableStateOf(0.0f)
-        }
-
-
-        LaunchedEffect(key1 = task.progress) {
-            previousProgress = currentProgress
-            currentProgress = when {
-                previousProgress == 1.0f
-                        || (1.0f - task.progress) < 0.01f -> 0.0f // snap empty
-                task.progress < previousProgress -> 1.0f // snap full
-                else -> task.progress
-            }
-        }
         Button(
             onClick = onClick,
             colors = ButtonDefaults.buttonColors(
@@ -145,42 +114,14 @@ fun TaskView(
                 .fillMaxHeight()
         ) {
 
-            val progress by animateFloatAsState(
-                targetValue = currentProgress,
-                animationSpec = tween(
-                    durationMillis = if (previousProgress < currentProgress) {
-                        TASK_UPDATE_INTERVAL
-                    } else {
-                        TASK_UPDATE_INTERVAL / 2
-                    },
-                    easing = if (previousProgress < currentProgress) {
-                        LinearEasing
-                    } else {
-                        FastOutSlowInEasing
-                    }
-                ),
-                label = "task progress"
+            ProgressBar(
+                progress = task.progress,
+                color = backgroundColor
             )
 
-            LinearProgressIndicator(
-                progress = progress,
-                color = backgroundColor,
-                modifier = Modifier
-                    .height(12.dp)
-                    .fillMaxWidth()
+            ProgressGainView(
+                gain = task.task.gain
             )
-
-            Row {
-                task.task.gain.forEachIndexed { index, amount ->
-                    if (index != 0) {
-                        Spacer(modifier = Modifier.width(16.dp))
-                    }
-                    Text(
-                        text = "+${amount.value}\n${amount.currency.title.toLowerCase(Locale.current)}",
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                }
-            }
             
             Spacer(modifier = Modifier.height(8.dp))
         }

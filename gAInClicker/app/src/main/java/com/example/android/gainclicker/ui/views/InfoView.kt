@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,8 +22,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.text.intl.Locale
-import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.android.gainclicker.core.CloudStorage
@@ -234,24 +231,14 @@ fun CloudStorageView(
                     .fillMaxHeight()
             ) {
 
-                LinearProgressIndicator(
+                ProgressBar(
                     progress = cloudStorage.progress,
-                    modifier = Modifier
-                        .height(12.dp)
-                        .fillMaxWidth()
+                    color = MaterialTheme.colorScheme.primary
                 )
+                
+                Spacer(modifier = Modifier.height(8.dp))
 
-                Row {
-                    CloudStorage.gain.forEachIndexed { index, amount ->
-                        if (index != 0) {
-                            Spacer(modifier = Modifier.width(16.dp))
-                        }
-                        Text(
-                            text = "+${amount.value}\n${amount.currency.title.toLowerCase(Locale.current)}",
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                    }
-                }
+                ProgressGainView(CloudStorage.gain)
             }
         }
     }
