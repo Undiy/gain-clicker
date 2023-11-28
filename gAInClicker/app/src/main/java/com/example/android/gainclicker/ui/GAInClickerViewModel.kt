@@ -1,31 +1,41 @@
 package com.example.android.gainclicker.ui
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import com.example.android.gainclicker.GAInClickerApplication
 import com.example.android.gainclicker.core.ClickAction
 import com.example.android.gainclicker.core.CloudStorage
 import com.example.android.gainclicker.core.GameState
 import com.example.android.gainclicker.core.IOModule
 import com.example.android.gainclicker.core.Module
 import com.example.android.gainclicker.core.Task
+import com.example.android.gainclicker.data.GameStateRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.time.Duration.Companion.milliseconds
 
 const val TASK_UPDATE_INTERVAL = 250
 
-class GAInClickerViewModel : ViewModel() {
-    private val _gameState = MutableStateFlow(GameState())
-    val gameState: StateFlow<GameState> = _gameState.asStateFlow()
+class GAInClickerViewModel(
+    private val gameStateRepository: GameStateRepository
+) : ViewModel() {
+    lateinit var gameState: StateFlow<GameState>
 
+    init {
+        viewModelScope.launch {
+            gameState = gameStateRepository.gameState
+                .stateIn(viewModelScope)
+        }
+    }
 
     private val timer = flow {
         while (true) {
@@ -37,51 +47,51 @@ class GAInClickerViewModel : ViewModel() {
     private val updater = viewModelScope.launch {
         withContext(Dispatchers.Default) {
             timer.collectLatest { timestamp ->
-                _gameState.update {
-                    it.updateProgress(timestamp)
-                }
+                gameStateRepository.updateGameState(
+                    gameState.value.updateProgress(timestamp)
+                )
             }
         }
     }
 
     fun isActionVisible(action: ClickAction): Boolean {
-        return action.isVisible(_gameState.value).also {visible ->
-            if (visible && action !in _gameState.value.visibleFeatures.actions) {
-                _gameState.update {
-                    it.copy(visibleFeatures = it.visibleFeatures.copy(
-                        actions = it.visibleFeatures.actions + action
-                    ))
-                }
+        return action.isVisible(gameState.value).also {visible ->
+            if (visible && action !in gameState.value.visibleFeatures.actions) {
+                gameStateRepository.updateVisibleFeatures(
+                    gameState.value.visibleFeatures.let {
+                        it.copy(
+                            actions = it.actions + action
+                        )
+                    }
+                )
             }
         }
     }
 
-    fun isActionEnabled(action: ClickAction) = action.isAcquirable(_gameState.value)
+    fun isActionEnabled(action: ClickAction) = action.isAcquirable(gameState.value)
 
     fun onActionClick(action: ClickAction) {
-        _gameState.update {
-            action.acquire(it)
-        }
+        gameStateRepository.updateGameState(action.acquire(gameState.value))
     }
 
     fun isTaskVisible(task: Task): Boolean {
-        return task.isVisible(_gameState.value).also {visible ->
-            if (visible && task !in _gameState.value.visibleFeatures.tasks) {
-                _gameState.update {
-                    it.copy(visibleFeatures = it.visibleFeatures.copy(
-                        tasks = it.visibleFeatures.tasks + task
-                    ))
+        return task.isVisible(gameState.value).also { visible ->
+            gameState.value.visibleFeatures.let { visibleFeatures ->
+                if (visible && task !in visibleFeatures.tasks) {
+                    gameStateRepository.updateVisibleFeatures(
+                        visibleFeatures.copy(
+                            tasks = visibleFeatures.tasks + task
+                        )
+                    )
                 }
             }
         }
     }
 
     fun onTaskClick(task: Task) {
-        _gameState.update {
-            it.copy(
-                tasks = it.tasks.toggleTaskThread(task)
-            )
-        }
+        gameStateRepository.updateTasks(
+            gameState.value.tasks.toggleTaskThread(task)
+        )
     }
 
     fun isModuleVisible(module: Module): Boolean {
@@ -90,8 +100,22 @@ class GAInClickerViewModel : ViewModel() {
             IOModule.IO_SOUND -> ClickAction.IO_MODULE_SOUND
             IOModule.IO_VIDEO -> ClickAction.IO_MODULE_VIDEO
             is CloudStorage -> ClickAction.CLOUD_STORAGE
-        } in _gameState.value.visibleFeatures.actions
+        } in gameState.value.visibleFeatures.actions
     }
 
-    fun isModuleEnabled(module: Module) = module in _gameState.value.modules
+    fun isModuleEnabled(module: Module) = module in gameState.value.modules
+
+    companion object {
+        val factory = viewModelFactory {
+            // Initializer for ItemEditViewModel
+            initializer {
+                GAInClickerViewModel(
+                    (this[
+                        ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY
+                    ] as GAInClickerApplication)
+                        .serviceLocator.gameStateRepository
+                )
+            }
+        }
+    }
 }

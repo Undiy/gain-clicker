@@ -158,7 +158,7 @@ fun ModuleCard(
     visible: Boolean,
     enabled: Boolean,
     modifier: Modifier = Modifier,
-    content: @Composable() (ColumnScope.() -> Unit)
+    content: @Composable (ColumnScope.() -> Unit)
 ) {
     AnimatedVisibility(visible = visible) {
         ElevatedCard(

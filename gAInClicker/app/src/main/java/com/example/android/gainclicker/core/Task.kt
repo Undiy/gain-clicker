@@ -7,7 +7,7 @@ const val DATA_CONVERSION_PROCESSING_UNITS_REQUIRED = 100
 const val DATA_GENERATION_DATASETS_REQUIRED = 1000
 const val DATA_GENERATION_PROCESSING_UNITS_REQUIRED = 100
 
-const val TASK_CURRENCY_GAIN = 1
+const val TASK_CURRENCY_GAIN = 10
 
 enum class Task(
     val requirement: List<CurrencyAmount>,

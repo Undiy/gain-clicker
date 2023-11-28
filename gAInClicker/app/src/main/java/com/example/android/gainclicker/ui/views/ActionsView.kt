@@ -76,7 +76,7 @@ fun ActionView(
             )
         }
 
-        action.cost.forEach() {
+        action.cost.forEach {
             Spacer(modifier = Modifier.width(16.dp))
             Text(
                 text = "-${it.value}\n${it.currency.title.toLowerCase(Locale.current)}",
