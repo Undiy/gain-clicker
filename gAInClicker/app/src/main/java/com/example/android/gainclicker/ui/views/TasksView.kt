@@ -25,13 +25,13 @@ import androidx.compose.ui.unit.dp
 import com.example.android.gainclicker.core.MAX_TASK_THREAD_SLOTS
 import com.example.android.gainclicker.core.Task
 import com.example.android.gainclicker.core.TaskState
-import com.example.android.gainclicker.core.TaskThreadsState
+import com.example.android.gainclicker.core.TasksState
 import com.example.android.gainclicker.ui.theme.GAInClickerTheme
 import com.example.android.gainclicker.ui.title
 
 @Composable
 fun TasksView(
-    state: TaskThreadsState,
+    state: TasksState,
     isTaskVisible: (Task) -> Boolean,
     onTaskClick: (Task) -> Unit,
     modifier: Modifier = Modifier
@@ -133,7 +133,7 @@ fun TaskView(
 fun TasksViewPreview() {
     GAInClickerTheme {
         TasksView(
-            state = TaskThreadsState(
+            state = TasksState(
                 threadSlots = MAX_TASK_THREAD_SLOTS,
                 taskThreads = setOf(Task.DATASET_ACCRUAL)
             ),

@@ -8,9 +8,11 @@ data class GameState(
 
     val modules: List<Module> = listOf(),
 
-    val tasks: TaskThreadsState = TaskThreadsState(),
+    val tasks: TasksState = TasksState(),
 
-    val visibleFeatures: VisibleFeatures = VisibleFeatures()
+    val visibleFeatures: VisibleFeatures = VisibleFeatures(),
+
+    var updatedAt: Long = System.currentTimeMillis()
 ) {
     fun ioModulesCount() = modules.count { it is IOModule }
 
@@ -22,7 +24,7 @@ data class GameState(
 
     fun updateProgress(timestamp: Long): GameState {
         val datasetMultiplier = 1.0f + deposit[Currency.PROCESSING_UNIT] / 100.0f
-        val progress = ((timestamp - tasks.updatedAt).coerceAtLeast(0)
+        val progress = ((timestamp - updatedAt).coerceAtLeast(0)
             .toFloat() / BASE_TASK_PROGRESS_RATE)
 
         Log.i("PROGRESS", "Updated progress: $progress $datasetMultiplier")
@@ -50,20 +52,20 @@ data class GameState(
                 .plus(cloudStorageGain)
                 .fold(deposit) { dep, amount -> dep + amount},
             tasks = tasks.copy(
-                tasks = updatedTasks,
-                updatedAt = timestamp
+                tasks = updatedTasks
             ),
             modules = if (cloudStorage == null) {
                 modules
             } else {
                 setCloudStorage(cloudStorage)
-            }
+            },
+            updatedAt = timestamp
         )
     }
 }
 
 data class Deposit(
-    private val accounts: Map<Currency, Int> = mapOf()
+    val accounts: Map<Currency, Int> = mapOf()
 ) {
     constructor(
         neurons: Int = 0,
@@ -139,13 +141,12 @@ data class TaskState(
     }
 }
 
-data class TaskThreadsState(
+data class TasksState(
     val threadSlots: Int = 0,
     val tasks: List<TaskState> = Task.values().map { TaskState(it) },
-    val taskThreads: Set<Task> = linkedSetOf(),
-    val updatedAt: Long = System.currentTimeMillis()
+    val taskThreads: Set<Task> = linkedSetOf()
 ) {
-    fun addThreadSlot(): TaskThreadsState = copy(threadSlots = threadSlots + 1)
+    fun addThreadSlot(): TasksState = copy(threadSlots = threadSlots + 1)
 
     fun toggleTaskThread(task: Task) = copy(
         taskThreads = if (task in taskThreads) {

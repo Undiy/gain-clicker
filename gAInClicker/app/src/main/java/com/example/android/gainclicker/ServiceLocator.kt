@@ -1,8 +1,8 @@
 package com.example.android.gainclicker
 
-import com.example.android.gainclicker.data.inmemory.InMemoryGameStateRepository
+import com.example.android.gainclicker.data.realm.RealmGameStateRepository
 
 class ServiceLocator {
 
-    val gameStateRepository = InMemoryGameStateRepository()
+    val gameStateRepository = RealmGameStateRepository()
 }

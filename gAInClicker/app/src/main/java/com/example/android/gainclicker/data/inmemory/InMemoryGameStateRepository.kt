@@ -3,7 +3,7 @@ package com.example.android.gainclicker.data.inmemory
 import com.example.android.gainclicker.core.Deposit
 import com.example.android.gainclicker.core.GameState
 import com.example.android.gainclicker.core.Module
-import com.example.android.gainclicker.core.TaskThreadsState
+import com.example.android.gainclicker.core.TasksState
 import com.example.android.gainclicker.core.VisibleFeatures
 import com.example.android.gainclicker.data.GameStateRepository
 import kotlinx.coroutines.flow.Flow
@@ -19,23 +19,23 @@ class InMemoryGameStateRepository(
     override val gameState: Flow<GameState>
         get() = _gameState.asStateFlow()
 
-    override fun updateGameState(newGameState: GameState) {
+    override suspend fun updateGameState(newGameState: GameState) {
         _gameState.update { newGameState }
     }
 
-    override fun updateDeposit(deposit: Deposit) {
+    override suspend fun updateDeposit(deposit: Deposit) {
         _gameState.update { it.copy(deposit = deposit) }
     }
 
-    override fun updateModules(modules: List<Module>) {
+    override suspend fun updateModules(modules: List<Module>) {
         _gameState.update { it.copy(modules = modules) }
     }
 
-    override fun updateTasks(tasks: TaskThreadsState) {
+    override suspend fun updateTasks(tasks: TasksState) {
         _gameState.update { it.copy(tasks = tasks) }
     }
 
-    override fun updateVisibleFeatures(visibleFeatures: VisibleFeatures) {
+    override suspend fun updateVisibleFeatures(visibleFeatures: VisibleFeatures) {
         _gameState.update { it.copy(visibleFeatures = visibleFeatures) }
     }
 

@@ -1,6 +1,6 @@
 package com.example.android.gainclicker.core
 
-const val CURRENCY_GAIN = 1
+const val CURRENCY_GAIN = 100
 
 const val MEMORY_BIN_NEURONS_REQUIRED = 100
 const val MEMORY_BIN_NEURONS_COST = 100

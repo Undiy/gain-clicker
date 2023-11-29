@@ -1,5 +1,6 @@
 package com.example.android.gainclicker.ui
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -15,6 +16,7 @@ import com.example.android.gainclicker.core.Task
 import com.example.android.gainclicker.data.GameStateRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flow
@@ -28,14 +30,13 @@ const val TASK_UPDATE_INTERVAL = 250
 class GAInClickerViewModel(
     private val gameStateRepository: GameStateRepository
 ) : ViewModel() {
-    lateinit var gameState: StateFlow<GameState>
 
-    init {
-        viewModelScope.launch {
-            gameState = gameStateRepository.gameState
-                .stateIn(viewModelScope)
-        }
-    }
+    val gameState: StateFlow<GameState> = gameStateRepository.gameState
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = GameState()
+        )
 
     private val timer = flow {
         while (true) {
@@ -57,13 +58,15 @@ class GAInClickerViewModel(
     fun isActionVisible(action: ClickAction): Boolean {
         return action.isVisible(gameState.value).also {visible ->
             if (visible && action !in gameState.value.visibleFeatures.actions) {
-                gameStateRepository.updateVisibleFeatures(
-                    gameState.value.visibleFeatures.let {
-                        it.copy(
-                            actions = it.actions + action
-                        )
-                    }
-                )
+                viewModelScope.launch {
+                    gameStateRepository.updateVisibleFeatures(
+                        gameState.value.visibleFeatures.let {
+                            it.copy(
+                                actions = it.actions + action
+                            )
+                        }
+                    )
+                }
             }
         }
     }
@@ -71,27 +74,33 @@ class GAInClickerViewModel(
     fun isActionEnabled(action: ClickAction) = action.isAcquirable(gameState.value)
 
     fun onActionClick(action: ClickAction) {
-        gameStateRepository.updateGameState(action.acquire(gameState.value))
+        viewModelScope.launch {
+            gameStateRepository.updateGameState(action.acquire(gameState.value))
+        }
     }
 
     fun isTaskVisible(task: Task): Boolean {
         return task.isVisible(gameState.value).also { visible ->
             gameState.value.visibleFeatures.let { visibleFeatures ->
                 if (visible && task !in visibleFeatures.tasks) {
-                    gameStateRepository.updateVisibleFeatures(
-                        visibleFeatures.copy(
-                            tasks = visibleFeatures.tasks + task
+                    viewModelScope.launch {
+                        gameStateRepository.updateVisibleFeatures(
+                            visibleFeatures.copy(
+                                tasks = visibleFeatures.tasks + task
+                            )
                         )
-                    )
+                    }
                 }
             }
         }
     }
 
     fun onTaskClick(task: Task) {
-        gameStateRepository.updateTasks(
-            gameState.value.tasks.toggleTaskThread(task)
-        )
+        viewModelScope.launch {
+            gameStateRepository.updateTasks(
+                gameState.value.tasks.toggleTaskThread(task)
+            )
+        }
     }
 
     fun isModuleVisible(module: Module): Boolean {

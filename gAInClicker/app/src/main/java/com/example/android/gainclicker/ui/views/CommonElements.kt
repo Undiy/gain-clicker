@@ -39,7 +39,7 @@ fun ProgressBar(
 
 
     LaunchedEffect(key1 = progress) {
-        fun isFullProgress(p: Float) = 1.0f - progress < 0.01f
+        fun isFullProgress(p: Float) = 1.0f - p < 0.01f
 
         val previousProgress: Float = currentPreviousProgress.first
         val currentProgress = when {
