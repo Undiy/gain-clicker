@@ -11,13 +11,13 @@ interface GameStateRepository {
 
     val gameState: Flow<GameState>
 
-    suspend fun updateGameState(newGameState: GameState)
+    suspend fun updateGameState(updater: (GameState) -> GameState)
 
-    suspend fun updateDeposit(deposit: Deposit)
+    suspend fun updateDeposit(updater: (Deposit) -> Deposit)
 
-    suspend fun updateModules(modules: List<Module>)
+    suspend fun updateModules(updater: (List<Module>) -> (List<Module>))
 
-    suspend fun updateTasks(tasks: TasksState)
+    suspend fun updateTasks(updater: (TasksState) -> TasksState)
 
-    suspend fun updateVisibleFeatures(visibleFeatures: VisibleFeatures)
+    suspend fun updateVisibleFeatures(updater: (VisibleFeatures) -> VisibleFeatures)
 }

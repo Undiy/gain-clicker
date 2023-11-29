@@ -19,24 +19,24 @@ class InMemoryGameStateRepository(
     override val gameState: Flow<GameState>
         get() = _gameState.asStateFlow()
 
-    override suspend fun updateGameState(newGameState: GameState) {
-        _gameState.update { newGameState }
+    override suspend fun updateGameState(updater: (GameState) -> GameState) {
+        _gameState.update(updater)
     }
 
-    override suspend fun updateDeposit(deposit: Deposit) {
-        _gameState.update { it.copy(deposit = deposit) }
+    override suspend fun updateDeposit(updater: (Deposit) -> Deposit) {
+        _gameState.update { it.copy(deposit = updater(it.deposit)) }
     }
 
-    override suspend fun updateModules(modules: List<Module>) {
-        _gameState.update { it.copy(modules = modules) }
+    override suspend fun updateModules(updater: (List<Module>) -> List<Module>) {
+        _gameState.update { it.copy(modules = updater(it.modules)) }
     }
 
-    override suspend fun updateTasks(tasks: TasksState) {
-        _gameState.update { it.copy(tasks = tasks) }
+    override suspend fun updateTasks(updater: (TasksState) -> TasksState) {
+        _gameState.update { it.copy(tasks = updater(it.tasks)) }
     }
 
-    override suspend fun updateVisibleFeatures(visibleFeatures: VisibleFeatures) {
-        _gameState.update { it.copy(visibleFeatures = visibleFeatures) }
+    override suspend fun updateVisibleFeatures(updater: (VisibleFeatures) -> VisibleFeatures) {
+        _gameState.update { it.copy(visibleFeatures = updater(it.visibleFeatures)) }
     }
 
 }

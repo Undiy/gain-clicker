@@ -13,16 +13,23 @@ import com.example.android.gainclicker.data.realm.schema.RealmModule
 import com.example.android.gainclicker.data.realm.schema.RealmTaskState
 import com.example.android.gainclicker.data.realm.schema.RealmTasksState
 import com.example.android.gainclicker.data.realm.schema.RealmVisibleFeatures
+import com.example.android.gainclicker.data.realm.schema.toDeposit
 import com.example.android.gainclicker.data.realm.schema.toGameState
+import com.example.android.gainclicker.data.realm.schema.toModule
 import com.example.android.gainclicker.data.realm.schema.toRealmDeposit
 import com.example.android.gainclicker.data.realm.schema.toRealmGameState
 import com.example.android.gainclicker.data.realm.schema.toRealmModule
 import com.example.android.gainclicker.data.realm.schema.toRealmRealmVisibleFeatures
 import com.example.android.gainclicker.data.realm.schema.toRealmTasksState
+import com.example.android.gainclicker.data.realm.schema.toTasksState
+import com.example.android.gainclicker.data.realm.schema.toVisibleFeatures
 import com.example.android.gainclicker.data.realm.schema.updateFrom
 import io.realm.kotlin.Realm
 import io.realm.kotlin.RealmConfiguration
+import io.realm.kotlin.ext.toRealmList
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.mapNotNull
 
 class RealmGameStateRepository : GameStateRepository {
@@ -38,46 +45,55 @@ class RealmGameStateRepository : GameStateRepository {
         Realm.open(config)
     }
 
-    private val gameStateQuery = realm.query(RealmGameState::class)
+    private val gameStateQuery
+        get() = realm.query(RealmGameState::class)
 
     override val gameState: Flow<GameState>
-        get() = gameStateQuery.first().asFlow().mapNotNull {
-            it.obj?.toGameState()
-        }
+        get() = gameStateQuery.first().asFlow()
+            .mapNotNull {
+                it.obj?.toGameState()
+            }
+            .flowOn(Dispatchers.Default)
 
-    override suspend fun updateGameState(newGameState: GameState) {
+    override suspend fun updateGameState(updater: (GameState) -> GameState) {
         realm.write {
-            findLatest(gameStateQuery.find().first())?.updateFrom(newGameState)
-        }
-    }
-
-    override suspend fun updateDeposit(deposit: Deposit) {
-        realm.write {
-            findLatest(gameStateQuery.find().first())?.deposit = deposit.toRealmDeposit()
-        }
-    }
-
-    override suspend fun updateModules(modules: List<Module>) {
-        realm.write {
-            findLatest(gameStateQuery.find().first())?.modules?.apply {
-                modules.mapTo(
-                    this,
-                    Module::toRealmModule
-                )
+            findLatest(gameStateQuery.find().first())?.apply {
+                updateFrom(updater(this.toGameState()))
             }
         }
     }
 
-    override suspend fun updateTasks(tasks: TasksState) {
+    override suspend fun updateDeposit(updater: (Deposit) -> Deposit) {
         realm.write {
-            findLatest(gameStateQuery.find().first())?.tasks = tasks.toRealmTasksState()
+            findLatest(gameStateQuery.find().first())?.apply {
+                deposit = updater(deposit?.toDeposit() ?: Deposit()).toRealmDeposit()
+            }
         }
     }
 
-    override suspend fun updateVisibleFeatures(visibleFeatures: VisibleFeatures) {
+    override suspend fun updateModules(updater: (List<Module>) -> List<Module>) {
         realm.write {
-            findLatest(gameStateQuery.find().first())?.visibleFeatures = visibleFeatures
-                .toRealmRealmVisibleFeatures()
+            findLatest(gameStateQuery.find().first())?.apply {
+                modules = updater(modules.map(RealmModule::toModule))
+                    .map(Module::toRealmModule).toRealmList()
+            }
+        }
+    }
+
+    override suspend fun updateTasks(updater: (TasksState) -> TasksState) {
+        realm.write {
+            findLatest(gameStateQuery.find().first())?.apply {
+                tasks = updater(tasks?.toTasksState() ?: TasksState()).toRealmTasksState()
+            }
+        }
+    }
+
+    override suspend fun updateVisibleFeatures(updater: (VisibleFeatures) -> VisibleFeatures) {
+        realm.write {
+            findLatest(gameStateQuery.find().first())?.apply {
+                visibleFeatures = updater(visibleFeatures?.toVisibleFeatures() ?: VisibleFeatures())
+                    .toRealmRealmVisibleFeatures()
+            }
         }
     }
 

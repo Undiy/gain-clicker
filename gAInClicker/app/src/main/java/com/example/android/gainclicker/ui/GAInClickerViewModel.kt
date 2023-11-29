@@ -1,6 +1,5 @@
 package com.example.android.gainclicker.ui
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -35,7 +34,7 @@ class GAInClickerViewModel(
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = GameState()
+            initialValue = GameState(updatedAt = 0)
         )
 
     private val timer = flow {
@@ -48,9 +47,9 @@ class GAInClickerViewModel(
     private val updater = viewModelScope.launch {
         withContext(Dispatchers.Default) {
             timer.collectLatest { timestamp ->
-                gameStateRepository.updateGameState(
-                    gameState.value.updateProgress(timestamp)
-                )
+                gameStateRepository.updateGameState {
+                    it.updateProgress(timestamp)
+                }
             }
         }
     }
@@ -59,13 +58,9 @@ class GAInClickerViewModel(
         return action.isVisible(gameState.value).also {visible ->
             if (visible && action !in gameState.value.visibleFeatures.actions) {
                 viewModelScope.launch {
-                    gameStateRepository.updateVisibleFeatures(
-                        gameState.value.visibleFeatures.let {
-                            it.copy(
-                                actions = it.actions + action
-                            )
-                        }
-                    )
+                    gameStateRepository.updateVisibleFeatures {
+                        it.copy(actions = it.actions + action)
+                    }
                 }
             }
         }
@@ -75,7 +70,9 @@ class GAInClickerViewModel(
 
     fun onActionClick(action: ClickAction) {
         viewModelScope.launch {
-            gameStateRepository.updateGameState(action.acquire(gameState.value))
+            gameStateRepository.updateGameState {
+                action.acquire(it)
+            }
         }
     }
 
@@ -84,11 +81,11 @@ class GAInClickerViewModel(
             gameState.value.visibleFeatures.let { visibleFeatures ->
                 if (visible && task !in visibleFeatures.tasks) {
                     viewModelScope.launch {
-                        gameStateRepository.updateVisibleFeatures(
-                            visibleFeatures.copy(
+                        gameStateRepository.updateVisibleFeatures {
+                            it.copy(
                                 tasks = visibleFeatures.tasks + task
                             )
-                        )
+                        }
                     }
                 }
             }
@@ -97,9 +94,9 @@ class GAInClickerViewModel(
 
     fun onTaskClick(task: Task) {
         viewModelScope.launch {
-            gameStateRepository.updateTasks(
-                gameState.value.tasks.toggleTaskThread(task)
-            )
+            gameStateRepository.updateTasks {
+                it.toggleTaskThread(task)
+            }
         }
     }
 

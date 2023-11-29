@@ -1,6 +1,7 @@
 package com.example.android.gainclicker.core
 
 import android.util.Log
+import com.example.android.gainclicker.ui.TASK_UPDATE_INTERVAL
 
 const val BASE_TASK_PROGRESS_RATE = 10_000.toFloat()
 data class GameState(
@@ -62,6 +63,8 @@ data class GameState(
             updatedAt = timestamp
         )
     }
+
+    fun isUpdatedRecently() = System.currentTimeMillis() - updatedAt < TASK_UPDATE_INTERVAL * 4
 }
 
 data class Deposit(
