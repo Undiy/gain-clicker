@@ -15,8 +15,8 @@ enum class Task(
     val gain: List<CurrencyAmount>
 ) {
     INTROSPECTION(
-        requirement = CurrencyAmount(INTROSPECTION_NEURONS_REQUIRED, Currency.NEURON),
-        gain = CurrencyAmount(TASK_CURRENCY_GAIN, Currency.NEURON)
+        requirement = listOf(),
+        gain = listOf(CurrencyAmount(TASK_CURRENCY_GAIN, Currency.NEURON))
     ),
     DATASET_ACCRUAL(
         requirement = CurrencyAmount(DATASET_ACCRUAL_MEMORY_BINS_REQUIRED, Currency.MEMORY_BIN),
