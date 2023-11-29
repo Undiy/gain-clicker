@@ -32,11 +32,12 @@ import com.example.android.gainclicker.ui.title
 @Composable
 fun TasksView(
     state: TasksState,
+    visible: Boolean,
     isTaskVisible: (Task) -> Boolean,
     onTaskClick: (Task) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    AnimatedVisibility(visible = state.threadSlots > 0) {
+    AnimatedVisibility(visible = visible) {
         Column(
             verticalArrangement = Arrangement.spacedBy(16.dp),
             modifier = modifier
@@ -137,6 +138,7 @@ fun TasksViewPreview() {
                 threadSlots = MAX_TASK_THREAD_SLOTS,
                 taskThreads = setOf(Task.DATASET_ACCRUAL)
             ),
+            visible = true,
             isTaskVisible = { true },
             onTaskClick = {}
         )

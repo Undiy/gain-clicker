@@ -76,6 +76,10 @@ class GAInClickerViewModel(
         }
     }
 
+    fun isTasksViewVisible(): Boolean {
+        return Task.values().any { it.isVisible(gameState.value) }
+    }
+
     fun isTaskVisible(task: Task): Boolean {
         return task.isVisible(gameState.value).also { visible ->
             gameState.value.visibleFeatures.let { visibleFeatures ->

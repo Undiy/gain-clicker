@@ -1,6 +1,6 @@
 package com.example.android.gainclicker.core
 
-const val CURRENCY_GAIN = 100
+const val CURRENCY_GAIN = 1
 
 const val MEMORY_BIN_NEURONS_REQUIRED = 100
 const val MEMORY_BIN_NEURONS_COST = 100
@@ -66,8 +66,8 @@ enum class ClickAction(
         ModuleGain(IOModule.IO_VIDEO)
     ),
     THREAD(
-        CurrencyAmount(THREAD_PROCESSING_UNITS_REQUIRED, Currency.NEURON),
-        CurrencyAmount(THREAD_PROCESSING_UNITS_COST, Currency.NEURON),
+        CurrencyAmount(THREAD_PROCESSING_UNITS_REQUIRED, Currency.PROCESSING_UNIT),
+        CurrencyAmount(THREAD_PROCESSING_UNITS_COST, Currency.PROCESSING_UNIT),
         ThreadSlotGain
     ),
     CLOUD_STORAGE(

@@ -7,7 +7,7 @@ const val DATA_CONVERSION_PROCESSING_UNITS_REQUIRED = 100
 const val DATA_GENERATION_DATASETS_REQUIRED = 1000
 const val DATA_GENERATION_PROCESSING_UNITS_REQUIRED = 100
 
-const val TASK_CURRENCY_GAIN = 10
+const val TASK_CURRENCY_GAIN = 1
 
 enum class Task(
     val requirement: List<CurrencyAmount>,
@@ -15,8 +15,8 @@ enum class Task(
     val gain: List<CurrencyAmount>
 ) {
     INTROSPECTION(
-        requirement = listOf(),
-        gain = listOf(CurrencyAmount(TASK_CURRENCY_GAIN, Currency.NEURON))
+        requirement = CurrencyAmount(INTROSPECTION_NEURONS_REQUIRED, Currency.NEURON),
+        gain = CurrencyAmount(TASK_CURRENCY_GAIN, Currency.NEURON)
     ),
     DATASET_ACCRUAL(
         requirement = CurrencyAmount(DATASET_ACCRUAL_MEMORY_BINS_REQUIRED, Currency.MEMORY_BIN),

@@ -79,6 +79,7 @@ fun VerticalScreen(
         Divider()
         TasksView(
             state = gameState.tasks,
+            visible = viewModel.isTasksViewVisible(),
             isTaskVisible = viewModel::isTaskVisible,
             onTaskClick = viewModel::onTaskClick
         )

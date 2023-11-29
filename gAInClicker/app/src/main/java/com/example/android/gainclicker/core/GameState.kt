@@ -3,7 +3,7 @@ package com.example.android.gainclicker.core
 import android.util.Log
 import com.example.android.gainclicker.ui.TASK_UPDATE_INTERVAL
 
-const val BASE_TASK_PROGRESS_RATE = 10_000.toFloat()
+const val BASE_TASK_PROGRESS_RATE = 60_000.toFloat()
 data class GameState(
     val deposit: Deposit = Deposit(),
 
@@ -145,7 +145,7 @@ data class TaskState(
 }
 
 data class TasksState(
-    val threadSlots: Int = 0,
+    val threadSlots: Int = 1,
     val tasks: List<TaskState> = Task.values().map { TaskState(it) },
     val taskThreads: Set<Task> = linkedSetOf()
 ) {

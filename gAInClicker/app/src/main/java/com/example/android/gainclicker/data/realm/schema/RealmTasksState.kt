@@ -13,7 +13,7 @@ import io.realm.kotlin.types.RealmSet
 
 class RealmTasksState : EmbeddedRealmObject {
 
-    var threadSlots: Int = 0
+    var threadSlots: Int = 1
     var tasks: RealmList<RealmTaskState> = realmListOf()
     var taskThreads: RealmSet<String> = realmSetOf()
 }
