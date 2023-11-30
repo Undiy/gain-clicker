@@ -19,7 +19,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -48,6 +47,8 @@ class GAInClickerViewModel(
         }
     }
 
+    private val stateLoaded: Boolean
+        get() = gameState.value.updatedAt != 0L
     private var updater: Job? = null
     private var updaterLock = Mutex()
 
@@ -55,14 +56,17 @@ class GAInClickerViewModel(
         updater = viewModelScope.launch {
             withContext(Dispatchers.Default) {
                 timer.collect { timestamp ->
-                    if (!updaterLock.isLocked) {
+                    if (stateLoaded && !updaterLock.isLocked) {
                         updaterLock.withLock {
                             gameStateRepository.updateGameState {
                                 it.updateProgress(timestamp)
                             }
                         }
                     } else {
-                        Log.i("PROGRESS", "Skip update")
+                        Log.i(
+                            "PROGRESS",
+                            "Skip update: ${if (stateLoaded) "locked" else "not loaded"}"
+                        )
                     }
                 }
             }
