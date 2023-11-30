@@ -145,7 +145,7 @@ data class TaskState(
 }
 
 data class TasksState(
-    val threadSlots: Int = 1,
+    val threadSlots: Int = 0,
     val tasks: List<TaskState> = Task.values().map { TaskState(it) },
     val taskThreads: Set<Task> = linkedSetOf()
 ) {

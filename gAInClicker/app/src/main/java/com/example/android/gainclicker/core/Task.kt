@@ -1,6 +1,5 @@
 package com.example.android.gainclicker.core
 
-const val INTROSPECTION_NEURONS_REQUIRED = 100
 const val DATASET_ACCRUAL_MEMORY_BINS_REQUIRED = 5
 const val DATA_SEARCH_PROCESSING_UNITS_REQUIRED = 1
 const val DATA_CONVERSION_PROCESSING_UNITS_REQUIRED = 100
@@ -15,8 +14,8 @@ enum class Task(
     val gain: List<CurrencyAmount>
 ) {
     INTROSPECTION(
-        requirement = CurrencyAmount(INTROSPECTION_NEURONS_REQUIRED, Currency.NEURON),
-        gain = CurrencyAmount(TASK_CURRENCY_GAIN, Currency.NEURON)
+        requirement = listOf(),
+        gain = listOf(CurrencyAmount(TASK_CURRENCY_GAIN, Currency.NEURON))
     ),
     DATASET_ACCRUAL(
         requirement = CurrencyAmount(DATASET_ACCRUAL_MEMORY_BINS_REQUIRED, Currency.MEMORY_BIN),

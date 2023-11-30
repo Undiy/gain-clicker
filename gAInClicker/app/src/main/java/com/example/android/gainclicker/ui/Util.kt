@@ -20,6 +20,7 @@ val ClickAction.title: String
     get() = when (this) {
         ClickAction.NEURON -> "Grow neuron"
         ClickAction.MEMORY_BIN -> "Allocate memory bin"
+        ClickAction.THREAD_FIRST -> "Allocate thread slot"
         ClickAction.PROCESSING_UNIT -> "Build processing unit"
         ClickAction.IO_MODULE_TEXT -> "Build text I/O module"
         ClickAction.IO_MODULE_SOUND -> "Build sound I/O module"

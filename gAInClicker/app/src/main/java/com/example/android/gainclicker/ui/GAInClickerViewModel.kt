@@ -77,7 +77,7 @@ class GAInClickerViewModel(
     }
 
     fun isTasksViewVisible(): Boolean {
-        return Task.values().any { it.isVisible(gameState.value) }
+        return gameState.value.tasks.threadSlots > 0
     }
 
     fun isTaskVisible(task: Task): Boolean {

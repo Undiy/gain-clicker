@@ -5,6 +5,9 @@ const val CURRENCY_GAIN = 1
 const val MEMORY_BIN_NEURONS_REQUIRED = 100
 const val MEMORY_BIN_NEURONS_COST = 100
 
+const val THREAD_FIRST_NEURONS_REQUIRED = 20
+const val THREAD_FIRST_NEURONS_COST = 100
+
 const val PROCESSING_UNIT_DATASETS_REQUIRED = 10
 const val PROCESSING_UNIT_NEURONS_COST = 100
 
@@ -44,6 +47,11 @@ enum class ClickAction(
         CurrencyAmount(MEMORY_BIN_NEURONS_REQUIRED, Currency.NEURON),
         CurrencyAmount(MEMORY_BIN_NEURONS_COST, Currency.NEURON),
         CurrencyGain(Currency.MEMORY_BIN)
+    ),
+    THREAD_FIRST(
+        CurrencyAmount(THREAD_FIRST_NEURONS_REQUIRED, Currency.NEURON),
+        CurrencyAmount(THREAD_FIRST_NEURONS_COST, Currency.NEURON),
+        ThreadSlotGain
     ),
     PROCESSING_UNIT(
         CurrencyAmount(PROCESSING_UNIT_DATASETS_REQUIRED, Currency.DATASET),
@@ -92,7 +100,13 @@ enum class ClickAction(
                 is IOModule -> gain.module !in state.modules
                 is CloudStorage -> state.modules.none { it is CloudStorage }
             }
-            ThreadSlotGain -> state.tasks.threadSlots < MAX_TASK_THREAD_SLOTS
+            ThreadSlotGain -> {
+                state.tasks.threadSlots < if (this == THREAD_FIRST) {
+                    1
+                } else {
+                    MAX_TASK_THREAD_SLOTS
+                }
+            }
         }
     }
 
