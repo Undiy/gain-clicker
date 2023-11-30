@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.time.Duration.Companion.milliseconds
 
-const val TASK_UPDATE_INTERVAL = 250
+const val TASK_UPDATE_INTERVAL = 500
 
 class GAInClickerViewModel(
     private val gameStateRepository: GameStateRepository
