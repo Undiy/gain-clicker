@@ -7,6 +7,6 @@ plugins {
 
 buildscript {
     extra.apply {
-        set("lifecycle_version", "2.6.2")
+        set("lifecycle_version", "2.7.0-rc01")
     }
 }

@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.LifecycleStartEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.android.gainclicker.core.GameState
 import com.example.android.gainclicker.ui.theme.GAInClickerTheme
@@ -31,6 +32,14 @@ fun GAInClickerApp(
     viewModel: GAInClickerViewModel = viewModel(factory = GAInClickerViewModel.factory)
 ) {
     val gameState by viewModel.gameState.collectAsStateWithLifecycle()
+
+    LifecycleStartEffect(Unit) {
+        viewModel.startUpdater()
+
+        onStopOrDispose {
+            viewModel.stopUpdater()
+        }
+    }
 
     if (gameState.isUpdatedRecently()) {
         VerticalScreen(

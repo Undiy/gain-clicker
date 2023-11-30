@@ -1,5 +1,6 @@
 package com.example.android.gainclicker.ui
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -14,6 +15,7 @@ import com.example.android.gainclicker.core.Module
 import com.example.android.gainclicker.core.Task
 import com.example.android.gainclicker.data.GameStateRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -21,6 +23,8 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -44,14 +48,30 @@ class GAInClickerViewModel(
         }
     }
 
-    private val updater = viewModelScope.launch {
-        withContext(Dispatchers.Default) {
-            timer.collectLatest { timestamp ->
-                gameStateRepository.updateGameState {
-                    it.updateProgress(timestamp)
+    private var updater: Job? = null
+    private var updaterLock = Mutex()
+
+    fun startUpdater() {
+        updater = viewModelScope.launch {
+            withContext(Dispatchers.Default) {
+                timer.collect { timestamp ->
+                    if (!updaterLock.isLocked) {
+                        updaterLock.withLock {
+                            gameStateRepository.updateGameState {
+                                it.updateProgress(timestamp)
+                            }
+                        }
+                    } else {
+                        Log.i("PROGRESS", "Skip update")
+                    }
                 }
             }
         }
+    }
+
+    fun stopUpdater() {
+        updater?.cancel()
+        updater = null
     }
 
     fun isActionVisible(action: ClickAction): Boolean {

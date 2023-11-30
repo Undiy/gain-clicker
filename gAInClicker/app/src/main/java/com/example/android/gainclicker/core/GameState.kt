@@ -28,6 +28,7 @@ data class GameState(
         val progress = ((timestamp - updatedAt).coerceAtLeast(0)
             .toFloat() / BASE_TASK_PROGRESS_RATE)
 
+        Log.i("PROGRESS", "Time delta: ${timestamp - updatedAt}/$TASK_UPDATE_INTERVAL")
         Log.i("PROGRESS", "Updated progress: $progress $datasetMultiplier")
 
         val (updatedTasks, tasksGain) = tasks.tasks.map { taskState ->
@@ -64,7 +65,7 @@ data class GameState(
         )
     }
 
-    fun isUpdatedRecently() = System.currentTimeMillis() - updatedAt < TASK_UPDATE_INTERVAL * 4
+    fun isUpdatedRecently() = (System.currentTimeMillis() - updatedAt) < TASK_UPDATE_INTERVAL * 4
 }
 
 data class Deposit(
