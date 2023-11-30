@@ -82,6 +82,7 @@ fun NumbersView(
     ) {
         listOf(
             Currency.NEURON,
+            Currency.MEMORY_BIN,
             Currency.DATASET,
             Currency.PROCESSING_UNIT,
             Currency.USER
