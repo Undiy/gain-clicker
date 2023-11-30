@@ -1,5 +1,7 @@
 package com.example.android.gainclicker.core
 
+const val LIMIT_GENERAL = 10_000
+
 enum class Currency {
     NEURON,
     DATASET,

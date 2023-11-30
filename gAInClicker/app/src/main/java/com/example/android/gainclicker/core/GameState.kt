@@ -92,14 +92,16 @@ data class Deposit(
 
     fun hasAmount(vararg amount: CurrencyAmount): Boolean = amount.all(::hasAmount)
 
+    private fun getCurrencyLimit(currency: Currency): Int {
+        return when(currency) {
+            Currency.DATASET -> this[Currency.MEMORY_BIN]
+            else -> LIMIT_GENERAL
+        }
+    }
+
     operator fun plus(amount: CurrencyAmount) = copy(
         accounts = (accounts + (amount.currency to this[amount.currency] + amount.value))
-            .mapValues { (currency, value) ->
-                when(currency) {
-                    Currency.DATASET -> value.coerceAtMost(this[Currency.MEMORY_BIN])
-                    else -> value
-                }
-            }
+            .mapValues { (currency, value) -> value.coerceAtMost(getCurrencyLimit(currency)) }
     )
 
     operator fun minus(amount: CurrencyAmount): Deposit {
