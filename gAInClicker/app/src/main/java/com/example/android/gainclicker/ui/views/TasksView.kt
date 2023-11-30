@@ -120,10 +120,12 @@ fun TaskView(
                 color = backgroundColor
             )
 
+            Spacer(modifier = Modifier.height(8.dp))
+
             ProgressGainView(
                 gain = task.task.gain
             )
-            
+
             Spacer(modifier = Modifier.height(8.dp))
         }
     }
