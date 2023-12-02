@@ -1,6 +1,5 @@
 package com.example.android.gainclicker.data.realm
 
-import android.util.Log
 import com.example.android.gainclicker.core.Deposit
 import com.example.android.gainclicker.core.GameState
 import com.example.android.gainclicker.core.Module
