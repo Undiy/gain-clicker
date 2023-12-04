@@ -24,7 +24,7 @@ import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.unit.dp
 import com.example.android.gainclicker.core.CurrencyAmount
-import com.example.android.gainclicker.ui.TASK_UPDATE_INTERVAL
+import com.example.android.gainclicker.ui.PROGRESS_UPDATE_INTERVAL
 import com.example.android.gainclicker.ui.title
 
 @Composable
@@ -55,9 +55,9 @@ fun ProgressBar(
             targetValue = currentProgress,
             animationSpec = tween(
                 durationMillis = if (previousProgress < currentProgress) {
-                    TASK_UPDATE_INTERVAL
+                    PROGRESS_UPDATE_INTERVAL
                 } else {
-                    TASK_UPDATE_INTERVAL / 2
+                    PROGRESS_UPDATE_INTERVAL / 2
                 },
                 easing = if (previousProgress < currentProgress) {
                     LinearEasing

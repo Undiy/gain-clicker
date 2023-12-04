@@ -16,50 +16,55 @@ import com.example.android.gainclicker.core.Task
 import com.example.android.gainclicker.data.GameStateRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.updateAndGet
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.time.Duration.Companion.milliseconds
 
-const val TASK_UPDATE_INTERVAL = 500
+const val PROGRESS_UPDATE_INTERVAL = 500
+const val SAVE_STATE_INTERVAL = 10_000L
 
 class GAInClickerViewModel(
     private val gameStateRepository: GameStateRepository
 ) : ViewModel() {
 
-    val gameState: StateFlow<GameState> = gameStateRepository.gameState
-        .onEach {
-            Log.i("PROGRESS", "new update: ${it.updatedAt}")
-        }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = GameState(updatedAt = 0)
-        )
+    private val _gameState = MutableStateFlow(GameState(updatedAt = 0L))
+    private var loadedAt: Long? = null
+
+    val gameState: StateFlow<GameState>
+        get() = _gameState
 
     private val timer = flow {
         while (true) {
             emit(System.currentTimeMillis())
-            delay(TASK_UPDATE_INTERVAL.milliseconds)
+            delay(PROGRESS_UPDATE_INTERVAL.milliseconds)
         }
     }
 
+    private var loader: Job? = null
+
     private val stateLoaded: Boolean
-        get() = gameState.value.updatedAt != 0L
+        get() = loadedAt != null
     private var updater: Job? = null
 
-    fun startUpdater() {
+    private fun startUpdater() {
         updater = viewModelScope.launch {
             withContext(Dispatchers.Default) {
                 timer.collect { timestamp ->
                     if (stateLoaded) {
-                        gameStateRepository.updateGameState {
+                        _gameState.update {
                             it.updateProgress(timestamp)
+                        }
+                        if (_gameState.value.updatedAt - loadedAt!! >= SAVE_STATE_INTERVAL) {
+                            loadedAt = null
+                            gameStateRepository.updateGameState { _gameState.value }
+                            Log.i("ViewModel", "State saved with ts ${_gameState.value.updatedAt}")
                         }
                     } else {
                         Log.i("PROGRESS", "Skip update: not loaded")
@@ -68,19 +73,56 @@ class GAInClickerViewModel(
             }
         }
     }
-
-    fun stopUpdater() {
-        updater?.cancel()
+    private suspend fun stopUpdater() {
+        updater?.cancelAndJoin()
         updater = null
+    }
+
+
+    private fun startLoader() {
+        loader = viewModelScope.launch {
+            gameStateRepository.gameState.collect { loadedGameState ->
+                loadedAt = _gameState.updateAndGet {
+                    loadedGameState
+                }.updatedAt
+                Log.i("ViewModel", "State loaded with ts $loadedAt")
+            }
+        }
+    }
+
+    private suspend fun stopLoader() {
+        loader?.cancelAndJoin()
+        loader = null
+    }
+
+
+    fun onStart() {
+        Log.i("ViewModel", "onStart")
+        startLoader()
+        startUpdater()
+    }
+
+    fun onStop() {
+        Log.i("ViewModel", "onStop")
+        viewModelScope.launch {
+            stopUpdater()
+            Log.i("ViewModel", "onStop: stopped updater")
+            stopLoader()
+            Log.i("ViewModel", "onStop: stopped loader")
+            gameStateRepository.updateGameState { _gameState.value }
+            Log.i("ViewModel", "onStop: saved state")
+        }
     }
 
     fun isActionVisible(action: ClickAction): Boolean {
         return action.isVisible(gameState.value).also {visible ->
             if (visible && action !in gameState.value.visibleFeatures.actions) {
-                viewModelScope.launch {
-                    gameStateRepository.updateVisibleFeatures {
-                        it.copy(actions = it.actions + action)
-                    }
+                _gameState.update {
+                    it.copy(
+                        visibleFeatures = it.visibleFeatures.copy(
+                            actions = it.visibleFeatures.actions + action
+                        )
+                    )
                 }
             }
         }
@@ -89,11 +131,9 @@ class GAInClickerViewModel(
     fun isActionEnabled(action: ClickAction) = action.isAcquirable(gameState.value)
 
     fun onActionClick(action: ClickAction) {
-        viewModelScope.launch {
-            gameStateRepository.updateGameState {
+            _gameState.update {
                 action.acquire(it)
             }
-        }
     }
 
     fun isTasksViewVisible(): Boolean {
@@ -104,12 +144,12 @@ class GAInClickerViewModel(
         return task.isVisible(gameState.value).also { visible ->
             gameState.value.visibleFeatures.let { visibleFeatures ->
                 if (visible && task !in visibleFeatures.tasks) {
-                    viewModelScope.launch {
-                        gameStateRepository.updateVisibleFeatures {
-                            it.copy(
-                                tasks = visibleFeatures.tasks + task
+                    _gameState.update {
+                        it.copy(
+                            visibleFeatures = it.visibleFeatures.copy(
+                                tasks = it.visibleFeatures.tasks + task
                             )
-                        }
+                        )
                     }
                 }
             }
@@ -118,8 +158,10 @@ class GAInClickerViewModel(
 
     fun onTaskClick(task: Task) {
         viewModelScope.launch {
-            gameStateRepository.updateTasks {
-                it.toggleTaskThread(task)
+            _gameState.update {
+                it.copy(
+                    tasks = it.tasks.toggleTaskThread(task)
+                )
             }
         }
     }

@@ -32,10 +32,10 @@ fun GAInClickerApp(
     val gameState by viewModel.gameState.collectAsStateWithLifecycle()
 
     LifecycleStartEffect(Unit) {
-        viewModel.startUpdater()
+        viewModel.onStart()
 
         onStopOrDispose {
-            viewModel.stopUpdater()
+            viewModel.onStop()
         }
     }
 
