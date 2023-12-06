@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LifecycleStartEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.android.gainclicker.Res
 import com.example.android.gainclicker.core.GameState
 import com.example.android.gainclicker.ui.theme.GAInClickerTheme
 import com.example.android.gainclicker.ui.views.ActionsView
@@ -58,7 +59,7 @@ fun LoadingScreen(
         contentAlignment = Alignment.Center,
         modifier = modifier
     ) {
-        Text("LOADING")
+        Text(Res.string.loading)
         CircularProgressIndicator(
             modifier = Modifier
                 .size(128.dp)

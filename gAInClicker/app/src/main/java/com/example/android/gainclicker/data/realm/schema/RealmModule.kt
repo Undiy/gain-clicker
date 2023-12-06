@@ -3,9 +3,7 @@ package com.example.android.gainclicker.data.realm.schema
 import com.example.android.gainclicker.core.CloudStorage
 import com.example.android.gainclicker.core.IOModule
 import com.example.android.gainclicker.core.Module
-import io.realm.kotlin.ext.realmListOf
 import io.realm.kotlin.types.EmbeddedRealmObject
-import io.realm.kotlin.types.RealmList
 
 class RealmModule : EmbeddedRealmObject {
 

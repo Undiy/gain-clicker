@@ -1,16 +1,11 @@
 package com.example.android.gainclicker.data.realm.schema
 
-import com.example.android.gainclicker.core.Currency
 import com.example.android.gainclicker.core.Deposit
 import com.example.android.gainclicker.core.GameState
 import com.example.android.gainclicker.core.Module
 import com.example.android.gainclicker.core.TasksState
 import com.example.android.gainclicker.core.VisibleFeatures
-import io.realm.kotlin.ext.realmDictionaryOf
 import io.realm.kotlin.ext.realmListOf
-import io.realm.kotlin.ext.toRealmDictionary
-import io.realm.kotlin.ext.toRealmList
-import io.realm.kotlin.types.RealmDictionary
 import io.realm.kotlin.types.RealmList
 import io.realm.kotlin.types.RealmObject
 import org.mongodb.kbson.ObjectId

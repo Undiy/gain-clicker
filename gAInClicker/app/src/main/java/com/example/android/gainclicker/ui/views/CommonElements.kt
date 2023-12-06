@@ -4,7 +4,8 @@ import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,12 +21,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.intl.Locale
-import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.unit.dp
 import com.example.android.gainclicker.core.CurrencyAmount
 import com.example.android.gainclicker.ui.PROGRESS_UPDATE_INTERVAL
-import com.example.android.gainclicker.ui.title
+import com.example.android.gainclicker.ui.currencyTitle
 
 @Composable
 fun ProgressBar(
@@ -78,18 +77,19 @@ fun ProgressBar(
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ProgressGainView(
     gain: List<CurrencyAmount>,
     modifier: Modifier = Modifier
 ) {
-    Row(modifier) {
+    FlowRow(modifier) {
         gain.forEachIndexed { index, amount ->
             if (index != 0) {
                 Spacer(modifier = Modifier.width(16.dp))
             }
             Text(
-                text = "+${amount.value}\n${amount.currency.title.toLowerCase(Locale.current)}",
+                text = "+${amount.value}\n${amount.currencyTitle}",
                 style = MaterialTheme.typography.bodyMedium
             )
         }

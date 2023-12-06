@@ -44,7 +44,7 @@ fun TasksView(
                 .padding(16.dp)
         ) {
             Text(
-                text = "Tasks (${state.taskThreads.size}/${state.threadSlots} threads)",
+                text = state.title,
                 style = MaterialTheme.typography.titleMedium
             )
             state.tasks.forEach {

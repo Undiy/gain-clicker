@@ -14,13 +14,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.android.gainclicker.core.ClickAction
+import com.example.android.gainclicker.ui.currencyTitle
 import com.example.android.gainclicker.ui.theme.GAInClickerTheme
 import com.example.android.gainclicker.ui.title
 
@@ -79,7 +78,7 @@ fun ActionView(
         action.cost.forEach {
             Spacer(modifier = Modifier.width(16.dp))
             Text(
-                text = "-${it.value}\n${it.currency.title.toLowerCase(Locale.current)}",
+                text = "-${it.value}\n${it.currencyTitle}",
                 style = MaterialTheme.typography.bodyMedium
             )
         }

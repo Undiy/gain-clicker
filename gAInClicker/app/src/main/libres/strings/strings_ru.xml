@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<!--    <string name="app_name">gAIn Clicker</string>-->
     <string name="loading">ЗАГРУЗКА</string>
     <string name="currency_neurons">Нейроны</string>
     <string name="currency_datasets">Датасеты</string>
