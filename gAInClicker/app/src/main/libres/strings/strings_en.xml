@@ -46,7 +46,7 @@
         <item quantity="one">user</item>
         <item quantity="other">users</item>
     </plurals>
-    <string name="tasks_title">Tasks ${tasks}/${threads}"</string>
+    <string name="tasks_title">Tasks ${tasks}/${threads}</string>
     <string name="ui_mode_title">UI mode</string>
     <string name="ui_mode_match_system">Match system</string>
     <string name="ui_mode_light">Light</string>
