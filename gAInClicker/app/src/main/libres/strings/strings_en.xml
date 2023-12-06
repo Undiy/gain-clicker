@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">gAIn Clicker</string>
+    <string name="loading">LOADING</string>
+    <string name="currency_neurons">Neurons</string>
+    <string name="currency_datasets">Datasets</string>
+    <string name="currency_memory_bins">Memory Bins</string>
+    <string name="currency_processing_units">Processing Units</string>
+    <string name="currency_users">Users</string>
+    <string name="action_neuron">Grow neuron</string>
+    <string name="action_memory_bin">Allocate memory bin</string>
+    <string name="action_thread">Create task thread</string>
+    <string name="action_processing_unit">Build processing unit</string>
+    <string name="action_text_i_o_module">Build text I/O module</string>
+    <string name="action_sound_i_o_module">Build sound I/O module</string>
+    <string name="action_video_i_o_module">Build video I/O module</string>
+    <string name="action_cloud_storage">Build cloud storage</string>
+    <string name="task_introspection">Introspection</string>
+    <string name="task_dataset_accrual">Dataset accrual</string>
+    <string name="task_data_search">Data search</string>
+    <string name="task_data_conversion">Data conversion</string>
+    <string name="task_data_generation">Data generation</string>
+    <string name="module_text_i_o">Text I/O</string>
+    <string name="module_sound_i_o">Sound I/O</string>
+    <string name="module_video_i_o">Video I/O</string>
+    <string name="module_cloud_storage">Cloud Storage</string>
+    <plurals name="currency_amount_neurons">
+        <item quantity="one">neuron</item>
+        <item quantity="other">neurons</item>
+    </plurals>
+    <plurals name="currency_amount_datasets">
+        <item quantity="one">dataset</item>
+        <item quantity="other">datasets</item>
+    </plurals>
+    <plurals name="currency_amount_memory_bins">
+        <item quantity="one">memory bins</item>
+        <item quantity="other">memory bins</item>
+    </plurals>
+    <plurals name="currency_amount_processing_units">
+        <item quantity="one">processing unit</item>
+        <item quantity="other">processing_units</item>
+    </plurals>
+    <plurals name="currency_amount_users">
+        <item quantity="one">user</item>
+        <item quantity="other">users</item>
+    </plurals>
+    <string name="tasks_title">Tasks ${tasks}/${threads}"</string>
+</resources>

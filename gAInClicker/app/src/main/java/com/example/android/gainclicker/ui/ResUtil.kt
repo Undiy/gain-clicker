@@ -1,5 +1,7 @@
 package com.example.android.gainclicker.ui
 
+import androidx.annotation.StringRes
+import com.example.android.gainclicker.R
 import com.example.android.gainclicker.core.ClickAction
 import com.example.android.gainclicker.core.CloudStorage
 import com.example.android.gainclicker.core.Currency
@@ -7,13 +9,14 @@ import com.example.android.gainclicker.core.IOModule
 import com.example.android.gainclicker.core.Module
 import com.example.android.gainclicker.core.Task
 
-val Currency.title: String
+@get:StringRes
+val Currency.title: Int
     get() = when (this) {
-        Currency.NEURON -> "Neurons"
-        Currency.DATASET -> "Datasets"
-        Currency.MEMORY_BIN -> "Memory Bins"
-        Currency.PROCESSING_UNIT -> "Processing Units"
-        Currency.USER -> "Users"
+        Currency.NEURON -> R.string.neurons
+        Currency.DATASET -> R.string.datasets
+        Currency.MEMORY_BIN -> R.string.memory_bins
+        Currency.PROCESSING_UNIT -> R.string.processing_units
+        Currency.USER -> R.string.users
     }
 
 val ClickAction.title: String

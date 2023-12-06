@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<!--    <string name="app_name">gAIn Clicker</string>-->
+    <string name="loading">ЗАГРУЗКА</string>
+    <string name="currency_neurons">Нейроны</string>
+    <string name="currency_datasets">Датасеты</string>
+    <string name="currency_memory_bins">Ячейки Памяти</string>
+    <string name="currency_processing_units">Процессоры</string>
+    <string name="currency_users">Пользователи</string>
+    <string name="action_neuron">Добавить нейрон</string>
+    <string name="action_memory_bin">Выделить ячейку памяти</string>
+    <string name="action_thread">Создать поток задачи</string>
+    <string name="action_processing_unit">Добавить процессор</string>
+    <string name="action_text_i_o_module">Установить текстовый I/O модуль</string>
+    <string name="action_sound_i_o_module">Установить аудио I/O модуль</string>
+    <string name="action_video_i_o_module">Установить видео I/O модуль</string>
+    <string name="action_cloud_storage">Установить облачное хранилище</string>
+    <string name="task_introspection">Самоанализ</string>
+    <string name="task_dataset_accrual">Получение датасетов</string>
+    <string name="task_data_search">Сбор данных</string>
+    <string name="task_data_conversion">Преобразование данных</string>
+    <string name="task_data_generation">Генерация данных</string>
+    <string name="module_text_i_o">Текстовый I/O</string>
+    <string name="module_sound_i_o">Аудио I/O</string>
+    <string name="module_video_i_o">Видео I/O</string>
+    <string name="module_cloud_storage">Облачное Хранилище</string>
+    <plurals name="currency_amount_neurons">
+        <item quantity="one">нейрон</item>
+        <item quantity="few">нейрона</item>
+        <item quantity="many">нейронов</item>
+    </plurals>
+    <plurals name="currency_amount_datasets">
+        <item quantity="one">датасет</item>
+        <item quantity="few">датасета</item>
+        <item quantity="many">датасетов</item>
+    </plurals>
+    <plurals name="currency_amount_memory_bins">
+        <item quantity="one">ячейка памяти</item>
+        <item quantity="few">ячейки памяти</item>
+        <item quantity="many">ячеек памяти</item>
+    </plurals>
+    <plurals name="currency_amount_processing_units">
+        <item quantity="one">процессор</item>
+        <item quantity="few">процессора</item>
+        <item quantity="many">процессоров</item>
+    </plurals>
+    <plurals name="currency_amount_users">
+        <item quantity="one">пользователь</item>
+        <item quantity="few">пользователя</item>
+        <item quantity="many">пользователей</item>
+    </plurals>
+    <string name="tasks_title">Задачи ${tasks}/${threads}</string>
+</resources>
