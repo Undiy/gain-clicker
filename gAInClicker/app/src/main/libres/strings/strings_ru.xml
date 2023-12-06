@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="settings_title">Настройки</string>
+    <string name="back_button">Назад</string>
     <string name="loading">ЗАГРУЗКА</string>
     <string name="currency_neurons">Нейроны</string>
     <string name="currency_datasets">Датасеты</string>
@@ -49,4 +51,8 @@
         <item quantity="many">пользователей</item>
     </plurals>
     <string name="tasks_title">Задачи ${tasks}/${threads}</string>
+    <string name="ui_mode_title">Темы</string>
+    <string name="ui_mode_match_system">Системная</string>
+    <string name="ui_mode_light">Светлая</string>
+    <string name="ui_mode_dark">Тёмная</string>
 </resources>

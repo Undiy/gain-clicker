@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="main_title">gAIn Clicker</string>
+    <string name="settings_title">Settings</string>
+    <string name="back_button">Back</string>
     <string name="loading">LOADING</string>
     <string name="currency_neurons">Neurons</string>
     <string name="currency_datasets">Datasets</string>
@@ -44,4 +47,8 @@
         <item quantity="other">users</item>
     </plurals>
     <string name="tasks_title">Tasks ${tasks}/${threads}"</string>
+    <string name="ui_mode_title">UI mode</string>
+    <string name="ui_mode_match_system">Match system</string>
+    <string name="ui_mode_light">Light</string>
+    <string name="ui_mode_dark">Dark</string>
 </resources>

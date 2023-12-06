@@ -9,6 +9,7 @@ import com.example.android.gainclicker.core.IOModule
 import com.example.android.gainclicker.core.Module
 import com.example.android.gainclicker.core.Task
 import com.example.android.gainclicker.core.TasksState
+import com.example.android.gainclicker.settings.UiMode
 
 val Currency.title: String
     get() = when (this) {
@@ -63,3 +64,10 @@ val TasksState.title: String
         tasks = "${taskThreads.size}",
         threads = "$threadSlots"
     )
+
+val UiMode.title: String
+    get() = when(this) {
+        UiMode.SYSTEM -> Res.string.ui_mode_match_system
+        UiMode.LIGHT -> Res.string.ui_mode_light
+        UiMode.DARK -> Res.string.ui_mode_dark
+    }

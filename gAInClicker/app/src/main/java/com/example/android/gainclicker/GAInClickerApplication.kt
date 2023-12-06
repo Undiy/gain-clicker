@@ -8,6 +8,6 @@ class GAInClickerApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        serviceLocator = ServiceLocator()
+        serviceLocator = ServiceLocator(this)
     }
 }

@@ -14,6 +14,8 @@ import com.example.android.gainclicker.core.IOModule
 import com.example.android.gainclicker.core.Module
 import com.example.android.gainclicker.core.Task
 import com.example.android.gainclicker.data.GameStateRepository
+import com.example.android.gainclicker.settings.UiMode
+import com.example.android.gainclicker.settings.SettingsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
@@ -31,8 +33,9 @@ const val PROGRESS_UPDATE_INTERVAL = 500
 const val SAVE_STATE_INTERVAL = 10_000L
 
 class GAInClickerViewModel(
-    private val gameStateRepository: GameStateRepository
-) : ViewModel() {
+    private val gameStateRepository: GameStateRepository,
+    private val settingsRepository: SettingsRepository
+) : ViewModel(){
 
     private val _gameState = MutableStateFlow(GameState(updatedAt = 0L))
     private var loadedAt: Long? = null
@@ -177,16 +180,29 @@ class GAInClickerViewModel(
 
     fun isModuleEnabled(module: Module) = module in gameState.value.modules
 
+    // Settings
+
+    val uiMode = settingsRepository.uiMode
+
+    fun setUiMode(uiMode: UiMode) {
+        viewModelScope.launch {
+            settingsRepository.setUiMode(uiMode)
+        }
+    }
+
     companion object {
         val factory = viewModelFactory {
             // Initializer for ItemEditViewModel
             initializer {
-                GAInClickerViewModel(
-                    (this[
-                        ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY
-                    ] as GAInClickerApplication)
-                        .serviceLocator.gameStateRepository
-                )
+                (this[
+                    ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY
+                ] as GAInClickerApplication).let { application ->
+                    GAInClickerViewModel(
+                        application.serviceLocator.gameStateRepository,
+                        application.serviceLocator.settingsRepository
+                    )
+                }
+
             }
         }
     }
