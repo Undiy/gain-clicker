@@ -1,7 +1,6 @@
 package com.example.android.gainclicker.ui
 
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -21,7 +20,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.LifecycleStartEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -133,12 +131,3 @@ fun GAInClickerTopAppBar(
     )
 }
 
-@Preview(showBackground = true)
-@Composable
-fun GAInClickerAppPreview() {
-    GAInClickerTheme {
-        GAInClickerApp(
-            modifier = Modifier.fillMaxSize()
-        )
-    }
-}
