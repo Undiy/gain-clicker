@@ -124,7 +124,7 @@ fun GAInClickerTopAppBar(
                 IconButton(onClick = navigateToSettings) {
                     Icon(
                         imageVector = Icons.Filled.Settings,
-                        contentDescription = "TODO"
+                        contentDescription = Res.string.settings_title
                     )
                 }
             }
