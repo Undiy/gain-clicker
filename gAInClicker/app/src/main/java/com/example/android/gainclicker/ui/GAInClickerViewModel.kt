@@ -2,11 +2,7 @@ package com.example.android.gainclicker.ui
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.android.gainclicker.GAInClickerApplication
 import com.example.android.gainclicker.core.ClickAction
 import com.example.android.gainclicker.core.CloudStorage
 import com.example.android.gainclicker.core.GameState
@@ -14,7 +10,6 @@ import com.example.android.gainclicker.core.IOModule
 import com.example.android.gainclicker.core.Module
 import com.example.android.gainclicker.core.Task
 import com.example.android.gainclicker.data.GameStateRepository
-import com.example.android.gainclicker.settings.UiMode
 import com.example.android.gainclicker.settings.SettingsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -34,7 +29,7 @@ const val SAVE_STATE_INTERVAL = 10_000L
 
 class GAInClickerViewModel(
     private val gameStateRepository: GameStateRepository,
-    private val settingsRepository: SettingsRepository
+    settingsRepository: SettingsRepository
 ) : ViewModel() {
 
     private val _gameState = MutableStateFlow(GameState(updatedAt = 0L))
