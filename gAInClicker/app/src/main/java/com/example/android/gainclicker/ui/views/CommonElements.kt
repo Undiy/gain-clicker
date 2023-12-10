@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,6 +22,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextLayoutResult
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import com.example.android.gainclicker.core.CurrencyAmount
 import com.example.android.gainclicker.ui.PROGRESS_UPDATE_INTERVAL
@@ -94,4 +104,35 @@ fun ProgressGainView(
             )
         }
     }
+}
+
+private const val AUTOSIZE_TEXT_MULTIPLIER = 0.9f
+private const val AUTOSIZE_TEXT_MULTIPLIER_MIN = 0.1f
+
+@Composable
+fun AutosizeText(
+    text: String,
+    modifier: Modifier = Modifier,
+    color: Color = Color.Unspecified,
+    textAlign: TextAlign? = null,
+    style: TextStyle = LocalTextStyle.current
+) {
+
+    var multiplier by remember { mutableStateOf(1f) }
+
+    Text(
+        text = text,
+        modifier = modifier,
+        textAlign = textAlign,
+        overflow = TextOverflow.Ellipsis,
+        style = LocalTextStyle.current.copy(
+            fontSize = LocalTextStyle.current.fontSize * multiplier
+        ),
+        onTextLayout = {
+            if (it.isLineEllipsized(it.lineCount - 1)
+                && multiplier > AUTOSIZE_TEXT_MULTIPLIER_MIN) {
+                multiplier *= AUTOSIZE_TEXT_MULTIPLIER
+            }
+        }
+    )
 }

@@ -66,7 +66,7 @@ fun ActionView(
             modifier = Modifier
                 .size(160.dp, 64.dp)
         ) {
-            Text(
+            AutosizeText(
                 text = action.title,
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.titleSmall.copy(
