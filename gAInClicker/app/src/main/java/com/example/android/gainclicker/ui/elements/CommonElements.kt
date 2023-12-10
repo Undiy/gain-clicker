@@ -1,4 +1,4 @@
-package com.example.android.gainclicker.ui.views
+package com.example.android.gainclicker.ui.elements
 
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing
@@ -22,15 +22,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import com.example.android.gainclicker.core.CurrencyAmount
 import com.example.android.gainclicker.ui.PROGRESS_UPDATE_INTERVAL
@@ -89,7 +83,7 @@ fun ProgressBar(
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun ProgressGainView(
+fun ProgressGain(
     gain: List<CurrencyAmount>,
     modifier: Modifier = Modifier
 ) {

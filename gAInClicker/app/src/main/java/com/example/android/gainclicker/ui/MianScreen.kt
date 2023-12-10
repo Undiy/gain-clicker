@@ -15,9 +15,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.android.gainclicker.Res
 import com.example.android.gainclicker.core.GameState
-import com.example.android.gainclicker.ui.views.ActionsView
-import com.example.android.gainclicker.ui.views.InfoView
-import com.example.android.gainclicker.ui.views.TasksView
+import com.example.android.gainclicker.ui.elements.ActionList
+import com.example.android.gainclicker.ui.elements.GameInfo
+import com.example.android.gainclicker.ui.elements.TaskList
 
 
 @Composable
@@ -67,21 +67,21 @@ fun VerticalScreen(
             .verticalScroll(rememberScrollState())
             .fillMaxSize()
     ) {
-        InfoView(
+        GameInfo(
             deposit = gameState.deposit,
             cloudStorage = gameState.getCloudStorage(),
             isModuleVisible = viewModel::isModuleVisible,
             isModuleEnabled = viewModel::isModuleEnabled
         )
         Divider()
-        TasksView(
+        TaskList(
             state = gameState.tasks,
             visible = viewModel.isTasksViewVisible(),
             isTaskVisible = viewModel::isTaskVisible,
             onTaskClick = viewModel::onTaskClick
         )
         Divider()
-        ActionsView(
+        ActionList(
             isActionVisible = viewModel::isActionVisible,
             isActionEnabled = viewModel::isActionEnabled,
             onClick = viewModel::onActionClick

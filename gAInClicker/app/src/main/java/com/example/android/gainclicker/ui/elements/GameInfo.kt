@@ -1,4 +1,4 @@
-package com.example.android.gainclicker.ui.views
+package com.example.android.gainclicker.ui.elements
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
@@ -33,7 +33,7 @@ import com.example.android.gainclicker.ui.theme.GAInClickerTheme
 import com.example.android.gainclicker.ui.title
 
 @Composable
-fun InfoView(
+fun GameInfo(
     deposit: Deposit,
     cloudStorage: CloudStorage?,
     isModuleVisible: (Module) -> Boolean,
@@ -44,7 +44,7 @@ fun InfoView(
         modifier = modifier.padding(16.dp)
     ) {
         Row {
-            NumbersView(
+            NumbersList(
                 deposit = deposit,
                 modifier = Modifier.weight(1.0f)
             )
@@ -72,7 +72,7 @@ fun InfoView(
 }
 
 @Composable
-fun NumbersView(
+fun NumbersList(
     deposit: Deposit,
     modifier: Modifier = Modifier
 ) {
@@ -87,7 +87,7 @@ fun NumbersView(
             Currency.PROCESSING_UNIT,
             Currency.USER
         ).forEach {
-            NumbersRowView(
+            NumbersItem(
                 title = it.title,
                 value = deposit[it].toString()
                         + if (it == Currency.DATASET) "/${deposit[Currency.MEMORY_BIN]}" else ""
@@ -97,7 +97,7 @@ fun NumbersView(
 }
 
 @Composable
-fun NumbersRowView(
+fun NumbersItem(
     title: String,
     value: String,
     modifier: Modifier = Modifier
@@ -119,9 +119,9 @@ fun NumbersRowView(
 
 @Preview(showBackground = true)
 @Composable
-fun NumbersViewPreview() {
+fun NumbersListPreview() {
     GAInClickerTheme {
-        NumbersView(
+        NumbersList(
             deposit = Deposit(
                 neurons = 1234,
                 datasets = 27,
@@ -239,7 +239,7 @@ fun CloudStorageView(
                 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                ProgressGainView(CloudStorage.gain)
+                ProgressGain(CloudStorage.gain)
             }
         }
     }
@@ -260,7 +260,7 @@ fun IoModulesViewPreview() {
 @Composable
 fun InfoViewPreview() {
     GAInClickerTheme {
-        InfoView(
+        GameInfo(
             deposit = Deposit(
                 neurons = 1234,
                 datasets = 27,

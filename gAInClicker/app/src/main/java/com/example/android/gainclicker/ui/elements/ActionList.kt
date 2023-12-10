@@ -1,4 +1,4 @@
-package com.example.android.gainclicker.ui.views
+package com.example.android.gainclicker.ui.elements
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
@@ -24,7 +24,7 @@ import com.example.android.gainclicker.ui.theme.GAInClickerTheme
 import com.example.android.gainclicker.ui.title
 
 @Composable
-fun ActionsView(
+fun ActionList(
     isActionVisible: (ClickAction) -> Boolean,
     isActionEnabled: (ClickAction) -> Boolean,
     onClick: (ClickAction) -> Unit,
@@ -39,7 +39,7 @@ fun ActionsView(
             AnimatedVisibility(
                 visible = isActionVisible(it)
             ) {
-                ActionView(
+                ActionItem(
                     action = it,
                     enabled = isActionEnabled(it),
                     onClick = { onClick(it) }
@@ -50,7 +50,7 @@ fun ActionsView(
 }
 
 @Composable
-fun ActionView(
+fun ActionItem(
     action: ClickAction,
     enabled: Boolean,
     onClick: () -> Unit,
@@ -87,9 +87,9 @@ fun ActionView(
 
 @Composable
 @Preview(showBackground = true)
-fun ActionsViewPreview() {
+fun ActionListPreview() {
     GAInClickerTheme {
-        ActionsView(
+        ActionList(
             isActionVisible = { true },
             isActionEnabled = {
                 it.ordinal % 2 == 0

@@ -1,4 +1,4 @@
-package com.example.android.gainclicker.ui.views
+package com.example.android.gainclicker.ui.elements
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
@@ -30,7 +30,7 @@ import com.example.android.gainclicker.ui.theme.GAInClickerTheme
 import com.example.android.gainclicker.ui.title
 
 @Composable
-fun TasksView(
+fun TaskList(
     state: TasksState,
     visible: Boolean,
     isTaskVisible: (Task) -> Boolean,
@@ -51,7 +51,7 @@ fun TasksView(
                 AnimatedVisibility(
                     visible = isTaskVisible(it.task)
                 ) {
-                    TaskView(
+                    TaskItem(
                         task = it,
                         isRunning = it.task in state.taskThreads,
                         onClick = { onTaskClick(it.task) }
@@ -63,7 +63,7 @@ fun TasksView(
 }
 
 @Composable
-fun TaskView(
+fun TaskItem(
     task: TaskState,
     isRunning: Boolean,
     onClick: () -> Unit,
@@ -122,7 +122,7 @@ fun TaskView(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            ProgressGainView(
+            ProgressGain(
                 gain = task.task.gain
             )
 
@@ -133,9 +133,9 @@ fun TaskView(
 
 @Preview(showBackground = true)
 @Composable
-fun TasksViewPreview() {
+fun TaskListPreview() {
     GAInClickerTheme {
-        TasksView(
+        TaskList(
             state = TasksState(
                 threadSlots = MAX_TASK_THREAD_SLOTS,
                 taskThreads = setOf(Task.DATASET_ACCRUAL)
