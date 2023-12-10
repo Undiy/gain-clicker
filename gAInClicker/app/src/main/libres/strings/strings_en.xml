@@ -47,8 +47,13 @@
         <item quantity="other">users</item>
     </plurals>
     <string name="tasks_title">Tasks ${tasks}/${threads}</string>
-    <string name="ui_mode_title">UI mode</string>
+    <string name="ui_mode_title">UI mode:</string>
     <string name="ui_mode_match_system">Match system</string>
     <string name="ui_mode_light">Light</string>
     <string name="ui_mode_dark">Dark</string>
+    <string name="reset_progress_button">Reset progress</string>
+    <string name="reset_progress_dialog_title">Are you sure you want to reset progress?</string>
+    <string name="reset_progress_dialog_text">This action cannot be undone</string>
+    <string name="reset_progress_dialog_confirm">Reset</string>
+    <string name="reset_progress_dialog_dismiss">Cancel</string>
 </resources>

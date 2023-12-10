@@ -25,6 +25,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.android.gainclicker.Res
 import com.example.android.gainclicker.settings.UiMode
+import com.example.android.gainclicker.ui.settings.SettingsScreen
 import com.example.android.gainclicker.ui.theme.GAInClickerTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -76,7 +77,6 @@ fun GAInClickerApp(
             if (showSettings) {
                 SettingsScreen(
                     uiMode = uiMode,
-                    onUiModeSelected = viewModel::setUiMode,
                     onBack = { showSettings = false },
                     modifier = modifier.padding(it)
                 )

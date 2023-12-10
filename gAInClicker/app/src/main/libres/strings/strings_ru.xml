@@ -51,8 +51,13 @@
         <item quantity="many">пользователей</item>
     </plurals>
     <string name="tasks_title">Задачи ${tasks}/${threads}</string>
-    <string name="ui_mode_title">Темы</string>
+    <string name="ui_mode_title">Тема:</string>
     <string name="ui_mode_match_system">Системная</string>
     <string name="ui_mode_light">Светлая</string>
     <string name="ui_mode_dark">Тёмная</string>
+    <string name="reset_progress_button">Сбросить прогресс</string>
+    <string name="reset_progress_dialog_title">Вы уверены, что хотите сбросить прогресс?</string>
+    <string name="reset_progress_dialog_text">Это действие не может быть отменено</string>
+    <string name="reset_progress_dialog_confirm">Сбросить</string>
+    <string name="reset_progress_dialog_dismiss">Отмена</string>
 </resources>
