@@ -65,6 +65,7 @@ dependencies {
     implementation("androidx.compose.material3:material3")
     implementation("io.realm.kotlin:library-base:1.11.0")
     implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation("io.insert-koin:koin-androidx-compose:${rootProject.extra["koin_version"]}")
 
     testImplementation("junit:junit:4.13.2")
 

@@ -27,12 +27,13 @@ import com.example.android.gainclicker.Res
 import com.example.android.gainclicker.settings.UiMode
 import com.example.android.gainclicker.ui.settings.SettingsScreen
 import com.example.android.gainclicker.ui.theme.GAInClickerTheme
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GAInClickerApp(
     modifier: Modifier = Modifier,
-    viewModel: GAInClickerViewModel = viewModel(factory = GAInClickerViewModel.factory)
+    viewModel: GAInClickerViewModel = koinViewModel()
 ) {
     val gameState by viewModel.gameState.collectAsStateWithLifecycle()
     val uiMode by viewModel.uiMode.collectAsStateWithLifecycle(initialValue = UiMode.SYSTEM)

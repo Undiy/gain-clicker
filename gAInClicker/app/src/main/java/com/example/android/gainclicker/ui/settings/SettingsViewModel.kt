@@ -29,20 +29,4 @@ class SettingsViewModel(
             gameStateRepository.updateGameState { GameState() }
         }
     }
-
-    companion object {
-        val factory = viewModelFactory {
-            // Initializer for ItemEditViewModel
-            initializer {
-                (this[
-                    ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY
-                ] as GAInClickerApplication).let { application ->
-                    SettingsViewModel(
-                        application.serviceLocator.gameStateRepository,
-                        application.serviceLocator.settingsRepository
-                    )
-                }
-            }
-        }
-    }
 }

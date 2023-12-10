@@ -9,6 +9,7 @@ buildscript {
     extra.apply {
         set("lifecycle_version", "2.7.0-rc01")
         set("libres_version", "1.2.2")
+        set("koin_version", "3.4.0")
     }
     dependencies {
         classpath("io.github.skeptick.libres:gradle-plugin:${rootProject.extra["libres_version"]}")

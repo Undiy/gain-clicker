@@ -35,7 +35,7 @@ const val SAVE_STATE_INTERVAL = 10_000L
 class GAInClickerViewModel(
     private val gameStateRepository: GameStateRepository,
     private val settingsRepository: SettingsRepository
-) : ViewModel(){
+) : ViewModel() {
 
     private val _gameState = MutableStateFlow(GameState(updatedAt = 0L))
     private var loadedAt: Long? = null
@@ -183,27 +183,4 @@ class GAInClickerViewModel(
     // Settings
 
     val uiMode = settingsRepository.uiMode
-
-    fun setUiMode(uiMode: UiMode) {
-        viewModelScope.launch {
-            settingsRepository.setUiMode(uiMode)
-        }
-    }
-
-    companion object {
-        val factory = viewModelFactory {
-            // Initializer for ItemEditViewModel
-            initializer {
-                (this[
-                    ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY
-                ] as GAInClickerApplication).let { application ->
-                    GAInClickerViewModel(
-                        application.serviceLocator.gameStateRepository,
-                        application.serviceLocator.settingsRepository
-                    )
-                }
-
-            }
-        }
-    }
 }

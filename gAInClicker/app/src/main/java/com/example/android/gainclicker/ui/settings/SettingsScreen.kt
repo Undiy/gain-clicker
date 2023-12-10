@@ -29,13 +29,14 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.android.gainclicker.Res
 import com.example.android.gainclicker.settings.UiMode
 import com.example.android.gainclicker.ui.title
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SettingsScreen(
     uiMode: UiMode,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: SettingsViewModel = viewModel(factory = SettingsViewModel.factory)
+    viewModel: SettingsViewModel = koinViewModel()
 ) {
     BackHandler(
         onBack = onBack
