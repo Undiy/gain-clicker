@@ -49,7 +49,7 @@ fun GAInClickerApp(
         }
     }
 
-    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     GAInClickerTheme(
         darkTheme = when(uiMode) {
             UiMode.SYSTEM -> isSystemInDarkTheme()
