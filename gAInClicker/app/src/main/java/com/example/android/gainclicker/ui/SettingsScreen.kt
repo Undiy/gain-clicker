@@ -24,8 +24,8 @@ import com.example.android.gainclicker.settings.UiMode
 
 @Composable
 fun SettingsScreen(
-    darkTheme: UiMode,
-    onDarkThemeChanged: (UiMode) -> Unit,
+    uiMode: UiMode,
+    onUiModeSelected: (UiMode) -> Unit,
     onBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -35,42 +35,52 @@ fun SettingsScreen(
     Column(
         modifier = modifier.padding(16.dp),
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically
+        UiModeSetting(uiMode, onUiModeSelected)
+    }
+}
+
+@Composable
+private fun UiModeSetting(
+    uiMode: UiMode,
+    onDarkThemeChanged: (UiMode) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = Res.string.ui_mode_title,
+            modifier = Modifier.alignByBaseline()
+        )
+
+        Spacer(modifier = Modifier.width(8.dp))
+
+        var menuExpanded by remember {
+            mutableStateOf(false)
+        }
+
+        Box(
+            modifier = Modifier.alignByBaseline()
         ) {
-            Text(
-                text = Res.string.ui_mode_title,
-                modifier = Modifier.alignByBaseline()
-            )
-            
-            Spacer(modifier = Modifier.width(8.dp))
-
-            var menuExpanded by remember {
-                mutableStateOf(false)
-            }
-
-            Box(
-                modifier = Modifier.alignByBaseline()
+            TextButton(
+                onClick = { menuExpanded = true }
             ) {
-                TextButton(
-                    onClick = { menuExpanded = true }
-                ) {
-                    Text(text = darkTheme.title)
-                }
-                DropdownMenu(
-                    expanded = menuExpanded,
-                    onDismissRequest = { menuExpanded = false },
-                ) {
+                Text(text = uiMode.title)
+            }
+            DropdownMenu(
+                expanded = menuExpanded,
+                onDismissRequest = { menuExpanded = false },
+            ) {
 
-                    UiMode.values().forEach {
-                        DropdownMenuItem(
-                            text = { Text(it.title) },
-                            onClick = {
-                                onDarkThemeChanged(it)
-                                menuExpanded = false
-                            }
-                        )
-                    }
+                UiMode.values().forEach {
+                    DropdownMenuItem(
+                        text = { Text(it.title) },
+                        onClick = {
+                            onDarkThemeChanged(it)
+                            menuExpanded = false
+                        }
+                    )
                 }
             }
         }

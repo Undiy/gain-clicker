@@ -75,8 +75,8 @@ fun GAInClickerApp(
         ) {
             if (showSettings) {
                 SettingsScreen(
-                    darkTheme = uiMode,
-                    onDarkThemeChanged = viewModel::setUiMode,
+                    uiMode = uiMode,
+                    onUiModeSelected = viewModel::setUiMode,
                     onBack = { showSettings = false },
                     modifier = modifier.padding(it)
                 )
