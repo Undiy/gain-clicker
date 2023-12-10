@@ -107,7 +107,6 @@ private const val AUTOSIZE_TEXT_MULTIPLIER_MIN = 0.1f
 fun AutosizeText(
     text: String,
     modifier: Modifier = Modifier,
-    color: Color = Color.Unspecified,
     textAlign: TextAlign? = null,
     style: TextStyle = LocalTextStyle.current
 ) {
@@ -119,8 +118,8 @@ fun AutosizeText(
         modifier = modifier,
         textAlign = textAlign,
         overflow = TextOverflow.Ellipsis,
-        style = LocalTextStyle.current.copy(
-            fontSize = LocalTextStyle.current.fontSize * multiplier
+        style = style.copy(
+            fontSize = style.fontSize * multiplier
         ),
         onTextLayout = {
             if (it.isLineEllipsized(it.lineCount - 1)
