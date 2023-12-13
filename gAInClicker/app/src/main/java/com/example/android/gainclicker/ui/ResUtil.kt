@@ -35,13 +35,14 @@ val ClickAction.title: String
     get() = when (this) {
         ClickAction.NEURON -> Res.string.action_neuron
         ClickAction.MEMORY_BIN -> Res.string.action_memory_bin
-        ClickAction.THREAD_FIRST -> Res.string.action_thread
+        ClickAction.THREAD_FIRST,
+        ClickAction.THREAD_SECOND,
+        ClickAction.THREAD_THIRD -> Res.string.action_thread
         ClickAction.PROCESSING_UNIT -> Res.string.action_processing_unit
         ClickAction.POWER_BLOCK -> Res.string.action_power_block
         ClickAction.IO_MODULE_TEXT -> Res.string.action_text_i_o_module
         ClickAction.IO_MODULE_SOUND -> Res.string.action_sound_i_o_module
         ClickAction.IO_MODULE_VIDEO -> Res.string.action_video_i_o_module
-        ClickAction.THREAD -> Res.string.action_thread
         ClickAction.CLOUD_STORAGE -> Res.string.action_cloud_storage
     }
 

@@ -2,11 +2,17 @@ package com.example.android.gainclicker.core
 
 const val CURRENCY_GAIN = 1
 
-const val MEMORY_BIN_NEURONS_REQUIRED = 100
-const val MEMORY_BIN_NEURONS_COST = 100
+const val MEMORY_BIN_NEURONS_REQUIRED = 150
+const val MEMORY_BIN_NEURONS_COST = 50
 
 const val THREAD_FIRST_NEURONS_REQUIRED = 20
 const val THREAD_FIRST_NEURONS_COST = 100
+
+const val THREAD_SECOND_USERS_REQUIRED = 1
+const val THREAD_SECOND_MEMORY_BINS_COST = 10
+
+const val THREAD_THIRD_USERS_REQUIRED = 100
+const val THREAD_THIRD_MEMORY_BINS_COST = 100
 
 const val PROCESSING_UNIT_DATASETS_REQUIRED = 10
 const val PROCESSING_UNIT_NEURONS_COST = 100
@@ -14,17 +20,14 @@ const val PROCESSING_UNIT_NEURONS_COST = 100
 const val POWER_BLOCK_PROCESSING_UNITS_REQUIRED = 2
 const val POWER_BLOCK_PROCESSING_UNITS_COST = 10
 
-const val IO_MODULE_TEXT_DATASETS_REQUIRED = 10
+const val IO_MODULE_TEXT_DATASETS_REQUIRED = 5
 const val IO_MODULE_TEXT_NEURONS_REQUIRED = 1000
 
-const val IO_MODULE_SOUND_NEURONS_REQUIRED = 500
+const val IO_MODULE_SOUND_DATASETS_REQUIRED = 25
 const val IO_MODULE_SOUND_NEURONS_COST = 5_000
 
-const val IO_MODULE_VIDEO_NEURONS_REQUIRED = 1_000
+const val IO_MODULE_VIDEO_DATASETS_REQUIRED = 100
 const val IO_MODULE_VIDEO_NEURONS_COST = 10_000
-
-const val THREAD_PROCESSING_UNITS_REQUIRED = 20
-const val THREAD_PROCESSING_UNITS_COST = 100
 
 const val CLOUD_STORAGE_USERS_REQUIRED = 100
 const val CLOUD_STORAGE_NEURONS_COST = 1_000
@@ -56,6 +59,16 @@ enum class ClickAction(
         CurrencyAmount(THREAD_FIRST_NEURONS_COST, Currency.NEURON),
         ThreadSlotGain
     ),
+    THREAD_SECOND(
+        CurrencyAmount(THREAD_SECOND_USERS_REQUIRED, Currency.USER),
+        CurrencyAmount(THREAD_SECOND_MEMORY_BINS_COST, Currency.MEMORY_BIN),
+        ThreadSlotGain
+    ),
+    THREAD_THIRD(
+        CurrencyAmount(THREAD_THIRD_USERS_REQUIRED, Currency.USER),
+        CurrencyAmount(THREAD_THIRD_MEMORY_BINS_COST, Currency.MEMORY_BIN),
+        ThreadSlotGain
+    ),
     PROCESSING_UNIT(
         CurrencyAmount(PROCESSING_UNIT_DATASETS_REQUIRED, Currency.DATASET),
         CurrencyAmount(PROCESSING_UNIT_NEURONS_COST, Currency.NEURON),
@@ -72,19 +85,14 @@ enum class ClickAction(
         ModuleGain(IOModule.IO_TEXT)
     ),
     IO_MODULE_SOUND(
-        CurrencyAmount(IO_MODULE_SOUND_NEURONS_REQUIRED, Currency.NEURON),
+        CurrencyAmount(IO_MODULE_SOUND_DATASETS_REQUIRED, Currency.DATASET),
         CurrencyAmount(IO_MODULE_SOUND_NEURONS_COST, Currency.NEURON),
         ModuleGain(IOModule.IO_SOUND)
     ),
     IO_MODULE_VIDEO(
-        CurrencyAmount(IO_MODULE_VIDEO_NEURONS_REQUIRED, Currency.NEURON),
+        CurrencyAmount(IO_MODULE_VIDEO_DATASETS_REQUIRED, Currency.DATASET),
         CurrencyAmount(IO_MODULE_VIDEO_NEURONS_COST, Currency.NEURON),
         ModuleGain(IOModule.IO_VIDEO)
-    ),
-    THREAD(
-        CurrencyAmount(THREAD_PROCESSING_UNITS_REQUIRED, Currency.PROCESSING_UNIT),
-        CurrencyAmount(THREAD_PROCESSING_UNITS_COST, Currency.PROCESSING_UNIT),
-        ThreadSlotGain
     ),
     CLOUD_STORAGE(
         listOf(CurrencyAmount(CLOUD_STORAGE_USERS_REQUIRED, Currency.PROCESSING_UNIT)),
