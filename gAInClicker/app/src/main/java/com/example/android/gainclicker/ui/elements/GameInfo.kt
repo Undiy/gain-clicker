@@ -26,7 +26,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.android.gainclicker.core.CloudStorage
 import com.example.android.gainclicker.core.Currency
+import com.example.android.gainclicker.core.DependencyCurrencyLimit
 import com.example.android.gainclicker.core.Deposit
+import com.example.android.gainclicker.core.GeneralCurrencyLimit
 import com.example.android.gainclicker.core.IOModule
 import com.example.android.gainclicker.core.Module
 import com.example.android.gainclicker.ui.theme.GAInClickerTheme
@@ -82,6 +84,7 @@ fun NumbersList(
     ) {
         listOf(
             Currency.NEURON,
+            Currency.POWER_BLOCK,
             Currency.MEMORY_BIN,
             Currency.DATASET,
             Currency.PROCESSING_UNIT,
@@ -89,8 +92,10 @@ fun NumbersList(
         ).forEach {
             NumbersItem(
                 title = it.title,
-                value = deposit[it].toString()
-                        + if (it == Currency.DATASET) "/${deposit[Currency.MEMORY_BIN]}" else ""
+                value = deposit[it].toString() + when(it.limit) {
+                    is DependencyCurrencyLimit -> "/${deposit.getCurrencyLimit(it)}"
+                    GeneralCurrencyLimit -> ""
+                }
             )
         }
     }

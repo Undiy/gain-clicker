@@ -14,6 +14,7 @@ import com.example.android.gainclicker.settings.UiMode
 val Currency.title: String
     get() = when (this) {
         Currency.NEURON -> Res.string.currency_neurons
+        Currency.POWER_BLOCK -> Res.string.currency_power_blocks
         Currency.DATASET -> Res.string.currency_datasets
         Currency.MEMORY_BIN -> Res.string.currency_memory_bins
         Currency.PROCESSING_UNIT -> Res.string.currency_processing_units
@@ -23,6 +24,7 @@ val Currency.title: String
 val CurrencyAmount.currencyTitle
     get() = when (currency) {
         Currency.NEURON -> Res.string.currency_amount_neurons
+        Currency.POWER_BLOCK -> Res.string.currency_amount_power_blocks
         Currency.DATASET -> Res.string.currency_amount_datasets
         Currency.MEMORY_BIN -> Res.string.currency_amount_memory_bins
         Currency.PROCESSING_UNIT -> Res.string.currency_amount_processing_units
@@ -35,6 +37,7 @@ val ClickAction.title: String
         ClickAction.MEMORY_BIN -> Res.string.action_memory_bin
         ClickAction.THREAD_FIRST -> Res.string.action_thread
         ClickAction.PROCESSING_UNIT -> Res.string.action_processing_unit
+        ClickAction.POWER_BLOCK -> Res.string.action_power_block
         ClickAction.IO_MODULE_TEXT -> Res.string.action_text_i_o_module
         ClickAction.IO_MODULE_SOUND -> Res.string.action_sound_i_o_module
         ClickAction.IO_MODULE_VIDEO -> Res.string.action_video_i_o_module

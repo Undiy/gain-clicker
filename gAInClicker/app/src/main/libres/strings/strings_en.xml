@@ -5,6 +5,7 @@
     <string name="back_button">Back</string>
     <string name="loading">LOADING</string>
     <string name="currency_neurons">Neurons</string>
+    <string name="currency_power_blocks">Power Blocks</string>
     <string name="currency_datasets">Datasets</string>
     <string name="currency_memory_bins">Memory Bins</string>
     <string name="currency_processing_units">Processing Units</string>
@@ -13,6 +14,7 @@
     <string name="action_memory_bin">Allocate memory bin</string>
     <string name="action_thread">Create task thread</string>
     <string name="action_processing_unit">Build processing unit</string>
+    <string name="action_power_block">Build power block</string>
     <string name="action_text_i_o_module">Build text I/O module</string>
     <string name="action_sound_i_o_module">Build sound I/O module</string>
     <string name="action_video_i_o_module">Build video I/O module</string>
@@ -30,6 +32,10 @@
         <item quantity="one">neuron</item>
         <item quantity="other">neurons</item>
     </plurals>
+    <plurals name="currency_amount_power_blocks">
+        <item quantity="one">power block</item>
+        <item quantity="other">power blocks</item>
+    </plurals>
     <plurals name="currency_amount_datasets">
         <item quantity="one">dataset</item>
         <item quantity="other">datasets</item>
@@ -40,7 +46,7 @@
     </plurals>
     <plurals name="currency_amount_processing_units">
         <item quantity="one">processing unit</item>
-        <item quantity="other">processing_units</item>
+        <item quantity="other">processing units</item>
     </plurals>
     <plurals name="currency_amount_users">
         <item quantity="one">user</item>
