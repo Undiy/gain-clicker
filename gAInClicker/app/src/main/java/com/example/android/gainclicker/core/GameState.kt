@@ -24,17 +24,35 @@ data class GameState(
     }
 
     fun updateProgress(timestamp: Long): GameState {
-        val datasetMultiplier = 1.0f + deposit[Currency.PROCESSING_UNIT] / 100.0f
+        val multiplier = 1.0f + deposit[Currency.PROCESSING_UNIT] / 100.0f
         val progress = ((timestamp - updatedAt).coerceAtLeast(0)
             .toFloat() / BASE_TASK_PROGRESS_RATE)
 
         Log.i("PROGRESS", "Time delta: ${timestamp - updatedAt}/$PROGRESS_UPDATE_INTERVAL")
-        Log.i("PROGRESS", "Updated progress: $progress $datasetMultiplier")
+        Log.i("PROGRESS", "Updated progress: $progress $multiplier")
 
-        val (updatedTasks, tasksGain) = tasks.tasks.map { taskState ->
+        // Get cloud storage gain first since it is the only source of passive memory bins
+        // It's still not full correct but should do for now
+        return updateCloudStorageProgress(progress)
+            .updateTasksProgress(progress * multiplier, timestamp)
+    }
+
+    private fun updateCloudStorageProgress(progress: Float): GameState {
+        return getCloudStorage()?.let {
+            it.increaseProgress(progress).let { (cloudStorage, cloudStorageGain) ->
+                copy(
+                    deposit = cloudStorageGain.fold(deposit) { dep, amount -> dep + amount },
+                    modules = setCloudStorage(cloudStorage)
+                )
+            }
+        } ?: this
+    }
+
+    private fun updateTasksProgress(progress: Float, timestamp: Long): GameState {
+        return tasks.tasks.map { taskState ->
             if (taskState.task in tasks.taskThreads) {
                 if (taskState.hasGainCapacity(this)) {
-                    taskState.increaseProgress(progress * datasetMultiplier)
+                    taskState.increaseProgress(progress)
                 } else {
                     // set progress to 0.0f
                     taskState.increaseProgress(-taskState.progress)
@@ -42,27 +60,18 @@ data class GameState(
             } else {
                 Pair(taskState, listOf())
             }
-        }.unzip()
+        }.unzip().let { (updatedTasks, tasksGain) ->
 
-        val (cloudStorage, cloudStorageGain) = getCloudStorage().let {
-            it?.increaseProgress(progress) ?: (null to listOf())
+            copy(
+                deposit = tasksGain
+                    .flatten()
+                    .fold(deposit) { dep, amount -> dep + amount },
+                tasks = tasks.copy(
+                    tasks = updatedTasks
+                ),
+                updatedAt = timestamp
+            )
         }
-
-        return copy(
-            deposit = tasksGain
-                .flatten()
-                .plus(cloudStorageGain)
-                .fold(deposit) { dep, amount -> dep + amount},
-            tasks = tasks.copy(
-                tasks = updatedTasks
-            ),
-            modules = if (cloudStorage == null) {
-                modules
-            } else {
-                setCloudStorage(cloudStorage)
-            },
-            updatedAt = timestamp
-        )
     }
 
     fun isUpdatedRecently() = (System.currentTimeMillis() - updatedAt) < PROGRESS_UPDATE_INTERVAL * 4
