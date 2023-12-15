@@ -117,10 +117,11 @@ enum class ClickAction(
                 is CloudStorage -> state.modules.none { it is CloudStorage }
             }
             ThreadSlotGain -> {
-                state.tasks.threadSlots < if (this == THREAD_FIRST) {
-                    1
-                } else {
-                    MAX_TASK_THREAD_SLOTS
+                state.tasks.threadSlots < when (this) {
+                    THREAD_FIRST -> 1
+                    THREAD_SECOND -> 2
+                    THREAD_THIRD -> 3
+                    else -> throw RuntimeException("ThreadSlotGain in click action $this")
                 }
             }
         }
