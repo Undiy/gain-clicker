@@ -11,8 +11,6 @@ kotlin {
             dependencies {
 
                 implementation(project(":shared"))
-
-//                api("io.insert-koin:koin-compose:1.0.4")
             }
         }
     }

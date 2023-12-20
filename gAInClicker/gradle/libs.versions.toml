@@ -12,7 +12,7 @@ androidxComposeBom = "2023.03.00"
 compose-plugin = "1.5.10"
 
 realm = "1.11.0"
-datastorePreferences = "1.0.0"
+datastorePreferences = "1.1.0-alpha07"
 koin = "3.5.0"
 koin-compose = "1.0.4"
 
@@ -23,7 +23,6 @@ androidxEspresso = "3.5.1"
 libres = "1.2.2"
 
 kotlinxCoroutines = "1.7.3"
-datastore = "1.0.0"
 
 precompose = "1.5.0"
 
@@ -44,7 +43,7 @@ androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "u
 androidx-compose-ui-test = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 
 realm-base = { group = "io.realm.kotlin", name = "library-base", version.ref = "realm" }
-androidx-datastore-preferences= { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
+androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
 androidx-datastore-preferences-core = { module = "androidx.datastore:datastore-preferences-core", version.ref = "datastorePreferences" }
 
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
@@ -58,8 +57,6 @@ kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-cor
 junit4 = { group = "junit", name = "junit", version.ref = "junit4" }
 androidx-test-ext = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "androidxTestExt" }
 androidx-test-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "androidxEspresso" }
-androidx-datastore-core = { group = "androidx.datastore", name = "datastore-core", version.ref = "datastore" }
-datastore-core = { group = "androidx.datastore", name = "datastore-core", version.ref = "datastore" }
 
 precompose = { group = "moe.tlaster", name = "precompose", version.ref = "precompose" }
 precompose-viewmodel = { group = "moe.tlaster", name = "precompose-viewmodel", version.ref = "precompose" }

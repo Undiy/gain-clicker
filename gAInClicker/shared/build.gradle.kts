@@ -49,12 +49,6 @@ kotlin {
 
             }
         }
-
-        val androidMain by getting {
-            dependencies {
-                implementation(libs.androidx.datastore.preferences)
-            }
-        }
     }
 
     dependencies {
