@@ -16,16 +16,16 @@ kotlin {
         }
     }
     
-//    listOf(
-//        iosX64(),
-//        iosArm64(),
-//        iosSimulatorArm64()
-//    ).forEach {
-//        it.binaries.framework {
-//            baseName = "shared"
-//            isStatic = true
-//        }
-//    }
+    listOf(
+        iosX64(),
+        iosArm64(),
+        iosSimulatorArm64()
+    ).forEach {
+        it.binaries.framework {
+            baseName = "shared"
+            isStatic = true
+        }
+    }
 
     sourceSets {
         val commonMain by getting {
@@ -46,7 +46,7 @@ kotlin {
                 api(libs.precompose.viewmodel)
                 api(libs.precompose.koin)
 
-
+                implementation(libs.androidx.lifecycle.common)
             }
         }
     }
