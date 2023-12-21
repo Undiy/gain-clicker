@@ -63,6 +63,16 @@ android {
     defaultConfig {
         minSdk = 21
     }
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
+    }
+}
+
+dependencies {
+    debugImplementation(compose.uiTooling)
 }
 
 libres {

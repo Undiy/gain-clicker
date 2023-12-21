@@ -22,7 +22,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.RectangleShape
-//import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import core.CloudStorage
 import core.Currency
@@ -31,7 +30,6 @@ import core.Deposit
 import core.GeneralCurrencyLimit
 import core.IOModule
 import core.Module
-//import com.example.android.gainclicker.ui.theme.GAInClickerTheme
 import ui.title
 
 @Composable
@@ -121,23 +119,6 @@ fun NumbersItem(
         )
     }
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//fun NumbersListPreview() {
-//    GAInClickerTheme {
-//        NumbersList(
-//            deposit = Deposit(
-//                neurons = 1234,
-//                datasets = 27,
-//                memoryBins = 49,
-//                processingUnits = 13
-//            )
-//        )
-//    }
-//}
-
-
 
 @Composable
 fun IoModulesView(
@@ -249,32 +230,3 @@ fun CloudStorageView(
         }
     }
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//fun IoModulesViewPreview() {
-//    GAInClickerTheme {
-//        IoModulesView(
-//            isModuleVisible = { true },
-//            isModuleEnabled = { it is IOModule && it.ordinal % 2 == 0 }
-//        )
-//    }
-//}
-
-//@Preview(showBackground = true)
-//@Composable
-//fun InfoViewPreview() {
-//    GAInClickerTheme {
-//        GameInfo(
-//            deposit = Deposit(
-//                neurons = 1234,
-//                datasets = 27,
-//                memoryBins = 49,
-//                processingUnits = 13
-//            ),
-//            cloudStorage = CloudStorage(0.5f),
-//            isModuleVisible = { true },
-//            isModuleEnabled = { it !is IOModule || it.ordinal % 2 == 0 }
-//        )
-//    }
-//}
