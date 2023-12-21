@@ -1,5 +1,6 @@
 package core
 
+import io.github.aakira.napier.Napier
 import util.currentTimeMillis
 
 const val PROGRESS_UPDATE_INTERVAL = 500
@@ -28,6 +29,9 @@ data class GameState(
         val multiplier = 1.0f + deposit[Currency.PROCESSING_UNIT] / 100.0f
         val progress = ((timestamp - updatedAt).coerceAtLeast(0)
             .toFloat() / BASE_TASK_PROGRESS_RATE)
+
+        Napier.i("Time delta: ${timestamp - updatedAt}/$PROGRESS_UPDATE_INTERVAL")
+        Napier.i("Updated progress: $progress $multiplier")
 
         // Get cloud storage gain first since it is the only source of passive memory bins
         // It's still not full correct but should do for now

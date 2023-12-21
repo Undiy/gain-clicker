@@ -1,8 +1,5 @@
 package ui
 
-//import android.util.Log
-import moe.tlaster.precompose.viewmodel.ViewModel
-import moe.tlaster.precompose.viewmodel.viewModelScope
 import core.ClickAction
 import core.CloudStorage
 import core.GameState
@@ -11,7 +8,7 @@ import core.Module
 import core.PROGRESS_UPDATE_INTERVAL
 import core.Task
 import data.GameStateRepository
-import settings.SettingsRepository
+import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
@@ -23,6 +20,9 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.flow.updateAndGet
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import moe.tlaster.precompose.viewmodel.ViewModel
+import moe.tlaster.precompose.viewmodel.viewModelScope
+import settings.SettingsRepository
 import util.currentTimeMillis
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -63,10 +63,10 @@ class GAInClickerViewModel(
                         if (_gameState.value.updatedAt - loadedAt!! >= SAVE_STATE_INTERVAL) {
                             loadedAt = null
                             gameStateRepository.updateGameState { _gameState.value }
-//                            Log.i("ViewModel", "State saved with ts ${_gameState.value.updatedAt}")
+                                Napier.i("State saved with ts ${_gameState.value.updatedAt}")
                         }
                     } else {
-//                        Log.i("PROGRESS", "Skip update: not loaded")
+                            Napier.i("Skip update: not loaded")
                     }
                 }
             }
@@ -84,7 +84,7 @@ class GAInClickerViewModel(
                 loadedAt = _gameState.updateAndGet {
                     loadedGameState
                 }.updatedAt
-//                Log.i("ViewModel", "State loaded with ts $loadedAt")
+                    Napier.i("State loaded with ts $loadedAt")
             }
         }
     }
@@ -96,20 +96,20 @@ class GAInClickerViewModel(
 
 
     fun onStart() {
-//        Log.i("ViewModel", "onStart")
+        Napier.i("onStart")
         startLoader()
         startUpdater()
     }
 
     fun onStop() {
-//        Log.i("ViewModel", "onStop")
+        Napier.i("onStop")
         viewModelScope.launch {
             stopUpdater()
-//            Log.i("ViewModel", "onStop: stopped updater")
+            Napier.i("onStop: stopped updater")
             stopLoader()
-//            Log.i("ViewModel", "onStop: stopped loader")
+            Napier.i("onStop: stopped loader")
             gameStateRepository.updateGameState { _gameState.value }
-//            Log.i("ViewModel", "onStop: saved state")
+            Napier.i("onStop: saved state")
         }
     }
 

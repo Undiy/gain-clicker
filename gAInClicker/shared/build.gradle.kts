@@ -46,6 +46,8 @@ kotlin {
                 api(libs.precompose.koin)
 
                 implementation(libs.kotlinx.datetime)
+
+                api(libs.napier)
             }
         }
 
