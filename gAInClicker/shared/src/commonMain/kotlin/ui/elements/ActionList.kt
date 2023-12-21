@@ -16,11 +16,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
+//import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import core.ClickAction
 import ui.currencyTitle
-import com.example.android.gainclicker.ui.theme.GAInClickerTheme
+//import com.example.android.gainclicker.ui.theme.GAInClickerTheme
 import ui.title
 
 @Composable
@@ -85,16 +85,16 @@ fun ActionItem(
     }
 }
 
-@Composable
-@Preview(showBackground = true)
-fun ActionListPreview() {
-    GAInClickerTheme {
-        ActionList(
-            isActionVisible = { true },
-            isActionEnabled = {
-                it.ordinal % 2 == 0
-            },
-            onClick = {}
-        )
-    }
-}
+//@Composable
+//@Preview(showBackground = true)
+//fun ActionListPreview() {
+//    GAInClickerTheme {
+//        ActionList(
+//            isActionVisible = { true },
+//            isActionEnabled = {
+//                it.ordinal % 2 == 0
+//            },
+//            onClick = {}
+//        )
+//    }
+//}

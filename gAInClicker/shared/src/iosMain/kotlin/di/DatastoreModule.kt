@@ -1,5 +1,6 @@
 package di
 
+import kotlinx.cinterop.ExperimentalForeignApi
 import org.koin.dsl.module
 import platform.Foundation.NSDocumentDirectory
 import platform.Foundation.NSFileManager
@@ -10,6 +11,7 @@ import settings.SettingsRepository
 import settings.dataStoreFileName
 import settings.getDataStore
 
+@OptIn(ExperimentalForeignApi::class)
 actual fun getDatastoreModuleByPlatform() = module {
 
     single {

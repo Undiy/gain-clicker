@@ -40,20 +40,20 @@ kotlin {
 
                 api(libs.koin.core)
                 api(libs.koin.compose)
-                api(libs.koin.android)
 
                 api(libs.precompose)
                 api(libs.precompose.viewmodel)
                 api(libs.precompose.koin)
 
-                implementation(libs.androidx.lifecycle.common)
+                implementation(libs.kotlinx.datetime)
             }
         }
-    }
 
-    dependencies {
-        debugImplementation(libs.androidx.compose.ui.tooling)
-        debugImplementation(libs.androidx.compose.ui.tooling.preview)
+        val androidMain by getting {
+            dependencies {
+                api(libs.koin.android)
+            }
+        }
     }
 }
 

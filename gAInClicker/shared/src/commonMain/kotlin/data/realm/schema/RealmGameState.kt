@@ -12,6 +12,7 @@ import io.realm.kotlin.ext.realmListOf
 import io.realm.kotlin.types.RealmList
 import io.realm.kotlin.types.RealmObject
 import org.mongodb.kbson.ObjectId
+import util.currentTimeMillis
 
 class RealmGameState : RealmObject {
 
@@ -25,7 +26,7 @@ class RealmGameState : RealmObject {
 
     var visibleFeatures: RealmVisibleFeatures? = null
 
-    var updatedAt: Long = System.currentTimeMillis()
+    var updatedAt: Long = currentTimeMillis()
 }
 
 fun RealmGameState.toGameState(): GameState {

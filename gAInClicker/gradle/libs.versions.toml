@@ -23,6 +23,7 @@ androidxEspresso = "3.5.1"
 libres = "1.2.2"
 
 kotlinxCoroutines = "1.7.3"
+kotlinxDatetime = "0.5.0"
 
 precompose = "1.5.0"
 
@@ -54,6 +55,7 @@ koin-compose = { group = "io.insert-koin", name = "koin-compose", version.ref = 
 libres = { group = "io.github.skeptick.libres", name = "gradle-plugin", version.ref = "libres"}
 
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
+kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinxDatetime" }
 
 junit4 = { group = "junit", name = "junit", version.ref = "junit4" }
 androidx-test-ext = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "androidxTestExt" }

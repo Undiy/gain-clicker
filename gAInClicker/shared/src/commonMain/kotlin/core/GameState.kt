@@ -1,5 +1,7 @@
 package core
 
+import util.currentTimeMillis
+
 const val PROGRESS_UPDATE_INTERVAL = 500
 const val BASE_TASK_PROGRESS_RATE = 60_000.toFloat()
 
@@ -12,7 +14,7 @@ data class GameState(
 
     val visibleFeatures: VisibleFeatures = VisibleFeatures(),
 
-    var updatedAt: Long = System.currentTimeMillis()
+    var updatedAt: Long = currentTimeMillis()
 ) {
     fun ioModulesCount() = modules.count { it is IOModule }
 
@@ -70,5 +72,5 @@ data class GameState(
         }
     }
 
-    fun isUpdatedRecently() = (System.currentTimeMillis() - updatedAt) < PROGRESS_UPDATE_INTERVAL * 4
+    fun isUpdatedRecently() = (currentTimeMillis() - updatedAt) < PROGRESS_UPDATE_INTERVAL * 4
 }

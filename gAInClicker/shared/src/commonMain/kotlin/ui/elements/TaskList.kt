@@ -20,13 +20,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
+//import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import core.MAX_TASK_THREAD_SLOTS
 import core.Task
 import core.TaskState
 import core.TasksState
-import com.example.android.gainclicker.ui.theme.GAInClickerTheme
+//import com.example.android.gainclicker.ui.theme.GAInClickerTheme
 import ui.title
 
 @Composable
@@ -131,18 +131,18 @@ fun TaskItem(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun TaskListPreview() {
-    GAInClickerTheme {
-        TaskList(
-            state = TasksState(
-                threadSlots = MAX_TASK_THREAD_SLOTS,
-                taskThreads = setOf(Task.DATASET_ACCRUAL)
-            ),
-            visible = true,
-            isTaskVisible = { true },
-            onTaskClick = {}
-        )
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun TaskListPreview() {
+//    GAInClickerTheme {
+//        TaskList(
+//            state = TasksState(
+//                threadSlots = MAX_TASK_THREAD_SLOTS,
+//                taskThreads = setOf(Task.DATASET_ACCRUAL)
+//            ),
+//            visible = true,
+//            isTaskVisible = { true },
+//            onTaskClick = {}
+//        )
+//    }
+//}
