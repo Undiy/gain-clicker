@@ -1,6 +1,7 @@
 rootProject.name = "gAInClicker"
 include(":androidApp")
 include(":shared")
+include(":desktopApp")
 
 pluginManagement {
     repositories {

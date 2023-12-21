@@ -11,7 +11,7 @@ androidxComposeBom = "2023.03.00"
 
 compose-plugin = "1.5.10"
 
-realm = "1.11.0"
+realm = "1.13.0"
 datastorePreferences = "1.1.0-alpha07"
 koin = "3.5.0"
 koin-compose = "1.0.4"

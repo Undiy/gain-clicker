@@ -27,6 +27,8 @@ kotlin {
         }
     }
 
+    jvm("desktop")
+
     sourceSets {
         val commonMain by getting {
             dependencies {
@@ -70,6 +72,10 @@ android {
     }
     composeOptions {
         kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
 }
 
