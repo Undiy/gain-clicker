@@ -96,6 +96,10 @@ class RealmGameStateRepository : GameStateRepository {
         }
     }
 
+    override fun close() {
+        realm.close()
+    }
+
     companion object {
         val schema = setOf(
             RealmGameState::class,

@@ -20,4 +20,6 @@ interface GameStateRepository {
     suspend fun updateTasks(updater: (TasksState) -> TasksState)
 
     suspend fun updateVisibleFeatures(updater: (VisibleFeatures) -> VisibleFeatures)
+
+    fun close() {}
 }
