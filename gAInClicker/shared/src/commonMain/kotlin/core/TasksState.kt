@@ -32,10 +32,7 @@ data class TaskState(
     ).let { (remaining, gain) -> Pair(copy(progress = remaining), gain) }
 
     fun hasGainCapacity(state: GameState): Boolean {
-        return when (this.task) {
-            Task.DATASET_ACCRUAL -> state.deposit[Currency.MEMORY_BIN] > state.deposit[Currency.DATASET]
-            else -> true
-        }
+        return task.gain.any { gainAmount -> !state.deposit.isCurrencyFull(gainAmount.currency) }
     }
 }
 

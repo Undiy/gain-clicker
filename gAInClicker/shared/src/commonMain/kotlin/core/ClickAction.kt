@@ -133,7 +133,9 @@ enum class ClickAction(
     }
 
     fun isAcquirable(state: GameState): Boolean {
-        return isNotLimited(state) && state.deposit.hasAmount(*cost.toTypedArray())
+        return isNotLimited(state)
+                && state.deposit.hasAmount(*cost.toTypedArray())
+                && (gain is CurrencyGain && !state.deposit.isCurrencyFull(gain.currency))
     }
 
     fun acquire(state: GameState): GameState {

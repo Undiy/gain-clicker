@@ -43,6 +43,8 @@ data class Deposit(
 
     fun getCurrencyLimit(currency: Currency) = accounts.getCurrencyLimit(currency)
 
+    fun isCurrencyFull(currency: Currency) = this[currency] == accounts.getCurrencyLimit(currency)
+
     companion object {
         private fun Map<Currency, Int>.applyCurrencyLimits() = this
             .mapValues { (currency, value) ->
