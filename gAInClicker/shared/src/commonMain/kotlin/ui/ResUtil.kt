@@ -1,6 +1,5 @@
 package ui
 
-import com.example.android.gainclicker.common.Res
 import core.ClickAction
 import core.CloudStorage
 import core.Currency
@@ -10,6 +9,7 @@ import core.Module
 import core.Task
 import core.TasksState
 import settings.UiMode
+import undiy.games.gainclicker.common.Res
 
 val Currency.title: String
     get() = when (this) {

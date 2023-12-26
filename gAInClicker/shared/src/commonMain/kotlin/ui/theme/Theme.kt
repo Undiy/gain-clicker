@@ -1,4 +1,4 @@
-package com.example.android.gainclicker.ui.theme
+package ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme

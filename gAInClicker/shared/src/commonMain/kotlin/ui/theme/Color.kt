@@ -1,4 +1,4 @@
-package com.example.android.gainclicker.ui.theme
+package ui.theme
 import androidx.compose.ui.graphics.Color
 
 val md_theme_light_primary = Color(0xFF056E00)

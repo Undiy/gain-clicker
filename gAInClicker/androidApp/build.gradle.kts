@@ -17,15 +17,15 @@ kotlin {
 }
 
 android {
-    namespace = "com.example.android.gainclicker"
+    namespace = "undiy.games.gainclicker"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.android.gainclicker"
+        applicationId = "undiy.games.gainclicker"
         minSdk = 21
         targetSdk = 34
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

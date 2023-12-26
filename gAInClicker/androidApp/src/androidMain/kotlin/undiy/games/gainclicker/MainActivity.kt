@@ -1,4 +1,4 @@
-package com.example.android.gainclicker
+package undiy.games.gainclicker
 
 import App
 import android.os.Bundle

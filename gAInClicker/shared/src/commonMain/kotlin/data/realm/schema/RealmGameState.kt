@@ -1,8 +1,5 @@
 package data.realm.schema
 
-import com.example.android.gainclicker.data.realm.schema.RealmModule
-import com.example.android.gainclicker.data.realm.schema.toModule
-import com.example.android.gainclicker.data.realm.schema.toRealmModule
 import core.Deposit
 import core.GameState
 import core.Module

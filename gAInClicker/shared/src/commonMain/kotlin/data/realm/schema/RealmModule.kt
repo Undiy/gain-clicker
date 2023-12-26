@@ -1,4 +1,4 @@
-package com.example.android.gainclicker.data.realm.schema
+package data.realm.schema
 
 import core.CloudStorage
 import core.IOModule

@@ -1,4 +1,4 @@
-package com.example.android.gainclicker
+package undiy.games.gainclicker
 
 import android.app.Application
 import di.initKoin

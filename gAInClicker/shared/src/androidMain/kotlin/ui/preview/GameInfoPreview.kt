@@ -2,13 +2,13 @@ package ui.preview
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.android.gainclicker.ui.theme.GAInClickerTheme
 import core.CloudStorage
 import core.Deposit
 import core.IOModule
 import ui.elements.GameInfo
 import ui.elements.IoModulesView
 import ui.elements.NumbersList
+import ui.theme.GAInClickerTheme
 
 @Preview(showBackground = true)
 @Composable

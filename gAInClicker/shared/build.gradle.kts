@@ -62,7 +62,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.example.android.gainclicker.common"
+    namespace = "undiy.games.gainclicker.common"
     compileSdk = 34
     defaultConfig {
         minSdk = 21

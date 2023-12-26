@@ -24,10 +24,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.android.gainclicker.common.Res
+import moe.tlaster.precompose.koin.koinViewModel
 import settings.UiMode
 import ui.title
-import moe.tlaster.precompose.koin.koinViewModel
+import undiy.games.gainclicker.common.Res
 
 @Composable
 fun SettingsScreen(

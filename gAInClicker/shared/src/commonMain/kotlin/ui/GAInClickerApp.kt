@@ -21,15 +21,15 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import com.example.android.gainclicker.common.Res
-import settings.UiMode
-import ui.settings.SettingsScreen
-import com.example.android.gainclicker.ui.theme.GAInClickerTheme
 import moe.tlaster.precompose.flow.collectAsStateWithLifecycle
 import moe.tlaster.precompose.koin.koinViewModel
 import moe.tlaster.precompose.lifecycle.Lifecycle
 import moe.tlaster.precompose.lifecycle.LifecycleObserver
 import moe.tlaster.precompose.lifecycle.LocalLifecycleOwner
+import settings.UiMode
+import ui.settings.SettingsScreen
+import ui.theme.GAInClickerTheme
+import undiy.games.gainclicker.common.Res
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
