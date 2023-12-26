@@ -130,9 +130,13 @@ class GAInClickerViewModel(
     fun isActionEnabled(action: ClickAction) = action.isAcquirable(gameState.value)
 
     fun onActionClick(action: ClickAction) {
-            _gameState.update {
+        _gameState.update {
+            if (action.isAcquirable(it)) {
                 action.acquire(it)
+            } else {
+                it
             }
+        }
     }
 
     fun isTasksViewVisible(): Boolean {
