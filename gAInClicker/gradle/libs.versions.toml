@@ -1,6 +1,7 @@
 [versions]
 
 agp = "8.2.0"
+desugar_jdk_libs = "2.0.4"
 kotlin = "1.9.20"
 
 androidxCore = "1.9.0"
@@ -48,6 +49,7 @@ androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "u
 
 androidx-compose-ui-test = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 
+desugar_jdk_libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar_jdk_libs" }
 realm-base = { group = "io.realm.kotlin", name = "library-base", version.ref = "realm" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
 androidx-datastore-preferences-core = { module = "androidx.datastore:datastore-preferences-core", version.ref = "datastorePreferences" }
