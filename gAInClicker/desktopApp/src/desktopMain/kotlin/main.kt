@@ -1,3 +1,5 @@
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import com.example.android.gainclicker.common.Res
@@ -11,9 +13,13 @@ fun main() = application {
 
     Napier.base(DebugAntilog())
 
+    val state = rememberWindowState(
+        position = WindowPosition(Alignment.Center)
+    )
+
     PreComposeWindow(
-        onCloseRequest = this::exitApplication,
-        state = rememberWindowState(),
+        onCloseRequest = ::exitApplication,
+        state = state,
         title = Res.string.main_title
     ) {
         App()
