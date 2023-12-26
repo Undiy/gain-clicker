@@ -32,13 +32,9 @@ import undiy.games.gainclicker.common.Res
 @Composable
 fun SettingsScreen(
     uiMode: UiMode,
-    onBack: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: SettingsViewModel = koinViewModel(SettingsViewModel::class)
 ) {
-//    BackHandler(
-//        onBack = onBack
-//    )
     Column(
         modifier = modifier
             .verticalScroll(rememberScrollState())
