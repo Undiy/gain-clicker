@@ -19,3 +19,4 @@ local.properties
 /*/release
 /*/build
 /desktopApp/default.realm*
+/desktopApp/settings.preferences_pb
