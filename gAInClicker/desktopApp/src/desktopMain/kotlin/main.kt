@@ -8,20 +8,22 @@ import io.github.aakira.napier.Napier
 import moe.tlaster.precompose.PreComposeWindow
 import undiy.games.gainclicker.common.Res
 
-fun main() = application {
+fun main() {
     initKoin()
 
     Napier.base(DebugAntilog())
 
-    val state = rememberWindowState(
-        position = WindowPosition(Alignment.Center)
-    )
+    application {
+	val state = rememberWindowState(
+	        position = WindowPosition(Alignment.Center)
+	    )
 
-    PreComposeWindow(
-        onCloseRequest = ::exitApplication,
-        state = state,
-        title = Res.string.main_title
-    ) {
-        App()
+        PreComposeWindow(
+            onCloseRequest = ::exitApplication,
+            state = state,
+            title = Res.string.main_title
+        ) {
+            App()
+        }
     }
 }
