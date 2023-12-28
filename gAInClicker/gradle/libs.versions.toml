@@ -15,7 +15,7 @@ compose-plugin = "1.5.10"
 realm = "1.13.0"
 datastorePreferences = "1.1.0-alpha07"
 koin = "3.5.0"
-koin-compose = "1.0.4"
+koin-compose = "1.1.0"
 
 junit4 = "4.13.2"
 androidxTestExt = "1.1.5"
@@ -26,7 +26,7 @@ libres = "1.2.2"
 kotlinxCoroutines = "1.7.3"
 kotlinxDatetime = "0.5.0"
 
-precompose = "1.5.0"
+precompose = "1.5.10"
 
 composeCompiler = "1.5.5"
 
@@ -57,6 +57,7 @@ androidx-datastore-preferences-core = { module = "androidx.datastore:datastore-p
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
 koin-compose = { group = "io.insert-koin", name = "koin-compose", version.ref = "koin-compose" }
+koin-androidx-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koin" }
 
 libres = { group = "io.github.skeptick.libres", name = "gradle-plugin", version.ref = "libres"}
 

@@ -16,21 +16,20 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import core.GameState
 import kotlinx.coroutines.flow.mapNotNull
 import moe.tlaster.precompose.flow.collectAsStateWithLifecycle
-import moe.tlaster.precompose.koin.koinViewModel
-import moe.tlaster.precompose.lifecycle.Lifecycle
-import moe.tlaster.precompose.lifecycle.LifecycleObserver
-import moe.tlaster.precompose.lifecycle.LocalLifecycleOwner
 import moe.tlaster.precompose.navigation.NavHost
 import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.navigation.rememberNavigator
 import moe.tlaster.precompose.navigation.transition.NavTransition
+import org.koin.compose.rememberKoinInject
+import settings.SettingsRepository
 import settings.UiMode
+import ui.main.MainScreen
 import ui.settings.SettingsScreen
 import ui.theme.GAInClickerTheme
 import undiy.games.gainclicker.common.Res
@@ -50,29 +49,10 @@ private fun String.toNavRoute() = NavRoute.entries.find { it.route == this }
 @Composable
 fun GAInClickerApp(
     modifier: Modifier = Modifier,
-    viewModel: GAInClickerViewModel = koinViewModel(GAInClickerViewModel::class)
+    onDispose: (GameState) -> Unit = {}
 ) {
-    val gameState by viewModel.gameState.collectAsStateWithLifecycle()
-    val uiMode by viewModel.uiMode.collectAsStateWithLifecycle(initial = UiMode.SYSTEM)
-
-    val lifecycleOwner = LocalLifecycleOwner.current
-    DisposableEffect(lifecycleOwner) {
-        val observer = object : LifecycleObserver {
-            override fun onStateChanged(state: Lifecycle.State) {
-                when (state) {
-                    Lifecycle.State.Active -> viewModel.onStart()
-                    Lifecycle.State.InActive -> viewModel.onStop()
-                    else -> {}
-                }
-            }
-        }
-        lifecycleOwner.lifecycle.addObserver(observer)
-
-        onDispose {
-            lifecycleOwner.lifecycle.removeObserver(observer)
-            viewModel.onStop()
-        }
-    }
+    val settingsRepository: SettingsRepository = rememberKoinInject()
+    val uiMode by settingsRepository.uiMode.collectAsStateWithLifecycle(initial = UiMode.SYSTEM)
 
     val navigator = rememberNavigator()
 
@@ -106,9 +86,8 @@ fun GAInClickerApp(
             ) {
                 scene(route = NavRoute.Main.route) {
                     MainScreen(
-                        viewModel = viewModel,
-                        gameState = gameState,
-                        modifier = modifier.padding(padding)
+                        modifier = modifier.padding(padding),
+                        onDispose = onDispose
                     )
                 }
                 scene(route = NavRoute.Settings.route) {

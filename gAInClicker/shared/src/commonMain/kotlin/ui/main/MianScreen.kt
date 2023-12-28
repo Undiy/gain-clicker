@@ -1,4 +1,4 @@
-package ui
+package ui.main
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,10 +10,17 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import core.GameState
+import moe.tlaster.precompose.flow.collectAsStateWithLifecycle
+import moe.tlaster.precompose.koin.koinViewModel
+import moe.tlaster.precompose.lifecycle.Lifecycle
+import moe.tlaster.precompose.lifecycle.LifecycleObserver
+import moe.tlaster.precompose.lifecycle.LocalLifecycleOwner
 import ui.elements.ActionList
 import ui.elements.GameInfo
 import ui.elements.TaskList
@@ -22,10 +29,32 @@ import undiy.games.gainclicker.common.Res
 
 @Composable
 fun MainScreen(
-    viewModel: GAInClickerViewModel,
-    gameState: GameState,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: MainViewModel = koinViewModel(MainViewModel::class),
+    onDispose: (GameState) -> Unit = {}
 ) {
+    val gameState by viewModel.gameState.collectAsStateWithLifecycle(initial = GameState(updatedAt = 0L))
+
+    val lifecycleOwner = LocalLifecycleOwner.current
+    DisposableEffect(lifecycleOwner) {
+        val observer = object : LifecycleObserver {
+            override fun onStateChanged(state: Lifecycle.State) {
+                when (state) {
+                    Lifecycle.State.Active -> viewModel.onStart()
+                    Lifecycle.State.InActive -> viewModel.onStop()
+                    else -> {}
+                }
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+            viewModel.onStop()
+            onDispose(gameState)
+        }
+    }
+
     if (gameState.isUpdatedRecently()) {
         VerticalScreen(
             viewModel = viewModel,
@@ -57,7 +86,7 @@ fun LoadingScreen(
 
 @Composable
 fun VerticalScreen(
-    viewModel: GAInClickerViewModel,
+    viewModel: MainViewModel,
     gameState: GameState,
     modifier: Modifier = Modifier
 ) {

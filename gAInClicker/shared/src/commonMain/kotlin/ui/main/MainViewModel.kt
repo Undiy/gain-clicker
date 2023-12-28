@@ -1,4 +1,4 @@
-package ui
+package ui.main
 
 import core.ClickAction
 import core.CloudStorage
@@ -22,15 +22,13 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import moe.tlaster.precompose.viewmodel.ViewModel
 import moe.tlaster.precompose.viewmodel.viewModelScope
-import settings.SettingsRepository
 import util.currentTimeMillis
 import kotlin.time.Duration.Companion.milliseconds
 
 const val SAVE_STATE_INTERVAL = 10_000L
 
-class GAInClickerViewModel(
-    private val gameStateRepository: GameStateRepository,
-    settingsRepository: SettingsRepository
+class MainViewModel(
+    private val gameStateRepository: GameStateRepository
 ) : ViewModel() {
 
     private val _gameState = MutableStateFlow(GameState(updatedAt = 0L))
@@ -179,8 +177,4 @@ class GAInClickerViewModel(
     }
 
     fun isModuleEnabled(module: Module) = module in gameState.value.modules
-
-    // Settings
-
-    val uiMode = settingsRepository.uiMode
 }
