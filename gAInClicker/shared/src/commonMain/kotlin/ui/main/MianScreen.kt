@@ -50,7 +50,6 @@ fun MainScreen(
 
         onDispose {
             lifecycleOwner.lifecycle.removeObserver(observer)
-            viewModel.onStop()
             onDispose(gameState)
         }
     }

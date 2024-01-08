@@ -19,7 +19,8 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.flow.updateAndGet
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import moe.tlaster.precompose.viewmodel.ViewModel
 import moe.tlaster.precompose.viewmodel.viewModelScope
 import util.currentTimeMillis
@@ -44,15 +45,17 @@ class MainViewModel(
         }
     }
 
+    private val startStopLock = Mutex()
+
     private var loader: Job? = null
 
     private val stateLoaded: Boolean
         get() = loadedAt != null
     private var updater: Job? = null
 
-    private fun startUpdater() {
-        updater = viewModelScope.launch {
-            withContext(Dispatchers.Default) {
+    private suspend fun startUpdater() {
+        if (updater == null) {
+            updater = viewModelScope.launch(Dispatchers.Default) {
                 timer.collect { timestamp ->
                     if (stateLoaded) {
                         _gameState.update {
@@ -61,29 +64,36 @@ class MainViewModel(
                         if (_gameState.value.updatedAt - loadedAt!! >= SAVE_STATE_INTERVAL) {
                             loadedAt = null
                             gameStateRepository.updateGameState { _gameState.value }
-                                Napier.i("State saved with ts ${_gameState.value.updatedAt}")
+                            Napier.i("State saved with ts ${_gameState.value.updatedAt}")
                         }
                     } else {
-                            Napier.i("Skip update: not loaded")
+                        Napier.i("Skip update: not loaded")
                     }
                 }
             }
+        } else {
+            Napier.w { "Updater already started!" }
         }
     }
+
     private suspend fun stopUpdater() {
         updater?.cancelAndJoin()
         updater = null
     }
 
 
-    private fun startLoader() {
-        loader = viewModelScope.launch {
-            gameStateRepository.gameState.collect { loadedGameState ->
-                loadedAt = _gameState.updateAndGet {
-                    loadedGameState
-                }.updatedAt
+    private suspend fun startLoader() {
+        if (loader == null) {
+            loader = viewModelScope.launch {
+                gameStateRepository.gameState.collect { loadedGameState ->
+                    loadedAt = _gameState.updateAndGet {
+                        loadedGameState
+                    }.updatedAt
                     Napier.i("State loaded with ts $loadedAt")
+                }
             }
+        } else {
+            Napier.w { "Loader already started!" }
         }
     }
 
@@ -92,22 +102,30 @@ class MainViewModel(
         loader = null
     }
 
-
     fun onStart() {
         Napier.i("onStart")
-        startLoader()
-        startUpdater()
+        viewModelScope.launch {
+            startStopLock.withLock {
+                startLoader()
+                Napier.i("onStart: started Loader")
+                startUpdater()
+                Napier.i("onStart: started Updater")
+
+            }
+        }
     }
 
     fun onStop() {
         Napier.i("onStop")
         viewModelScope.launch {
-            stopUpdater()
-            Napier.i("onStop: stopped updater")
-            stopLoader()
-            Napier.i("onStop: stopped loader")
-            gameStateRepository.updateGameState { _gameState.value }
-            Napier.i("onStop: saved state")
+            startStopLock.withLock {
+                stopUpdater()
+                Napier.i("onStop: stopped updater")
+                stopLoader()
+                Napier.i("onStop: stopped loader")
+                gameStateRepository.updateGameState { _gameState.value }
+                Napier.i("onStop: saved state")
+            }
         }
     }
 
