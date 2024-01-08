@@ -24,6 +24,7 @@ import kotlinx.coroutines.sync.withLock
 import moe.tlaster.precompose.viewmodel.ViewModel
 import moe.tlaster.precompose.viewmodel.viewModelScope
 import util.currentTimeMillis
+import kotlin.concurrent.Volatile
 import kotlin.time.Duration.Companion.milliseconds
 
 const val SAVE_STATE_INTERVAL = 10_000L
@@ -33,6 +34,8 @@ class MainViewModel(
 ) : ViewModel() {
 
     private val _gameState = MutableStateFlow(GameState(updatedAt = 0L))
+
+    @Volatile
     private var loadedAt: Long? = null
 
     val gameState: StateFlow<GameState>
@@ -63,6 +66,7 @@ class MainViewModel(
                         }
                         if (_gameState.value.updatedAt - loadedAt!! >= SAVE_STATE_INTERVAL) {
                             loadedAt = null
+                            Napier.i("Saving state...")
                             gameStateRepository.updateGameState { _gameState.value }
                             Napier.i("State saved with ts ${_gameState.value.updatedAt}")
                         }
@@ -146,12 +150,16 @@ class MainViewModel(
     fun isActionEnabled(action: ClickAction) = action.isAcquirable(gameState.value)
 
     fun onActionClick(action: ClickAction) {
-        _gameState.update {
-            if (action.isAcquirable(it)) {
-                action.acquire(it)
-            } else {
-                it
+        if (stateLoaded) {
+            _gameState.update {
+                if (action.isAcquirable(it)) {
+                    action.acquire(it)
+                } else {
+                    it
+                }
             }
+        } else {
+            Napier.w("Skipping action click (state not loaded): $action")
         }
     }
 
@@ -176,12 +184,16 @@ class MainViewModel(
     }
 
     fun onTaskClick(task: Task) {
-        viewModelScope.launch {
-            _gameState.update {
-                it.copy(
-                    tasks = it.tasks.toggleTaskThread(task)
-                )
+        if (stateLoaded) {
+            viewModelScope.launch {
+                _gameState.update {
+                    it.copy(
+                        tasks = it.tasks.toggleTaskThread(task)
+                    )
+                }
             }
+        } else {
+            Napier.w("Skipping task click (state not loaded): $task")
         }
     }
 
