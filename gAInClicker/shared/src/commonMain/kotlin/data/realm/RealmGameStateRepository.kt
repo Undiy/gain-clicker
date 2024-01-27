@@ -40,6 +40,7 @@ class RealmGameStateRepository : GameStateRepository {
             .initialData {
                 copyToRealm(GameState().toRealmGameState())
             }
+            .name("gain-clicker.db")
             .build()
         Realm.open(config)
     }

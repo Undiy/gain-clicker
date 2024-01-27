@@ -12,11 +12,13 @@ class GAInClickerApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
+        if (BuildConfig.DEBUG) {
+            Napier.base(DebugAntilog())
+        }
+
         initKoin {
             androidLogger()
             androidContext(this@GAInClickerApplication)
         }
-
-        Napier.base(DebugAntilog())
     }
 }

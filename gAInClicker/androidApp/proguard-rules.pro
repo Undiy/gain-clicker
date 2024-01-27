@@ -20,4 +20,5 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
+-keepclasseswithmembers class libcore.icu.NativePluralRules
 -dontwarn libcore.icu.NativePluralRules
