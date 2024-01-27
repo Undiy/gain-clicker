@@ -3,6 +3,7 @@ package ui
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -48,7 +49,6 @@ private fun String.toNavRoute() = NavRoute.entries.find { it.route == this }
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GAInClickerApp(
-    modifier: Modifier = Modifier,
     onDispose: (GameState) -> Unit = {}
 ) {
     val settingsRepository: SettingsRepository = rememberKoinInject()
@@ -56,7 +56,7 @@ fun GAInClickerApp(
 
     val navigator = rememberNavigator()
 
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     GAInClickerTheme(
         darkTheme = when(uiMode) {
             UiMode.SYSTEM -> isSystemInDarkTheme()
@@ -82,18 +82,19 @@ fun GAInClickerApp(
                     pauseTransition = fadeOut(),
                     resumeTransition = fadeIn(),
                 ),
-                persistNavState = true
+                persistNavState = true,
+                modifier = Modifier.padding(padding),
             ) {
                 scene(route = NavRoute.Main.route) {
                     MainScreen(
-                        modifier = modifier.padding(padding),
-                        onDispose = onDispose
+                        modifier = Modifier.fillMaxSize(),
+                        onDispose = onDispose,
                     )
                 }
                 scene(route = NavRoute.Settings.route) {
                     SettingsScreen(
                         uiMode = uiMode,
-                        modifier = modifier.padding(padding)
+                        modifier = Modifier.fillMaxSize()
                     )
                 }
             }
