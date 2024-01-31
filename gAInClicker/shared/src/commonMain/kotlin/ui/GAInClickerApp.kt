@@ -49,7 +49,7 @@ private fun String.toNavRoute() = NavRoute.entries.find { it.route == this }
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GAInClickerApp(
-    onDispose: (GameState) -> Unit = {}
+    onGameStateChanged: (GameState) -> Unit = {}
 ) {
     val settingsRepository: SettingsRepository = rememberKoinInject()
     val uiMode by settingsRepository.uiMode.collectAsStateWithLifecycle(initial = UiMode.SYSTEM)
@@ -88,7 +88,7 @@ fun GAInClickerApp(
                 scene(route = NavRoute.Main.route) {
                     MainScreen(
                         modifier = Modifier.fillMaxSize(),
-                        onDispose = onDispose,
+                        onGameStateChanged = onGameStateChanged,
                     )
                 }
                 scene(route = NavRoute.Settings.route) {

@@ -51,7 +51,11 @@ class RealmGameStateRepository : GameStateRepository {
     override val gameState: Flow<GameState>
         get() = gameStateQuery.first().asFlow()
             .mapNotNull {
-                it.obj?.toGameState()
+                if (realm.isClosed()) {
+                    null
+                } else {
+                    it.obj?.toGameState()
+                }
             }
             .flowOn(Dispatchers.Default)
 

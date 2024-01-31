@@ -14,7 +14,7 @@ fun main() {
     Napier.base(DebugAntilog())
 
     application {
-	val state = rememberWindowState(
+        val state = rememberWindowState(
 	        position = WindowPosition(Alignment.Center)
 	    )
 

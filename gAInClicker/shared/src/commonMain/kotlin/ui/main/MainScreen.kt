@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import core.GameState
+import kotlinx.coroutines.flow.onEach
 import moe.tlaster.precompose.flow.collectAsStateWithLifecycle
 import moe.tlaster.precompose.koin.koinViewModel
 import moe.tlaster.precompose.lifecycle.Lifecycle
@@ -31,9 +32,11 @@ import undiy.games.gainclicker.common.Res
 fun MainScreen(
     modifier: Modifier = Modifier,
     viewModel: MainViewModel = koinViewModel(MainViewModel::class),
-    onDispose: (GameState) -> Unit = {}
+    onGameStateChanged: (GameState) -> Unit = {}
 ) {
-    val gameState by viewModel.gameState.collectAsStateWithLifecycle(initial = GameState(updatedAt = 0L))
+    val gameState by viewModel.gameState
+        .onEach{ onGameStateChanged(it) }
+        .collectAsStateWithLifecycle(initial = GameState(updatedAt = 0L))
 
     val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(lifecycleOwner) {
@@ -50,7 +53,6 @@ fun MainScreen(
 
         onDispose {
             lifecycleOwner.lifecycle.removeObserver(observer)
-            onDispose(gameState)
         }
     }
 

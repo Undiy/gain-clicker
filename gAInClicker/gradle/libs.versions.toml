@@ -33,6 +33,8 @@ composeCompiler = "1.5.5"
 
 napier = "2.6.1"
 
+shadow = "8.1.1"
+
 [libraries]
 
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidxCore" }
@@ -84,3 +86,5 @@ kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref =
 
 realm-gradlePlugin = { id = "io.realm.kotlin", version.ref = "realm" }
 libres-gradlePlugin = { id = "io.github.skeptick.libres" }
+
+shadow = { id = "com.github.johnrengelman.shadow", version.ref = "shadow" }
